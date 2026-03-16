@@ -1,0 +1,28 @@
+name: Update Onbid Data
+on:
+  schedule:
+    - cron: '0 0 * * *' # 매일 자정 실행 (UTC 기준)
+  workflow_dispatch: # 수동 실행 버튼 추가
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install requests pandas openpyxl
+      - name: Run update script
+        env:
+          ONBID_AUTH_KEY: ${{ secrets.ONBID_AUTH_KEY }}
+        run: python fetch_onbid.py
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "action@github.com"
+          git add onbid_data.js
+          git commit -m "Auto-update onbid data" || exit 0
+          git push

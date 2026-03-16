@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>산지 공매 검색 결과 - 산림청</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            color: #333;
+            font-size: 13px;
+        }
+
+        /* ===== HEADER ===== */
+        .site-header {
+            background: linear-gradient(135deg, #1a5c2e 0%, #2d8a4e 100%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-top-bar {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 6px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .header-top-bar a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            margin-left: 12px;
+        }
+
+        .header-top-bar a:hover {
+            color: #fff;
+        }
+
+        .header-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-emblem {
+            width: 56px;
+            height: 56px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            font-size: 28px;
+        }
+
+        .logo-text h1 {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text p {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 6px;
+        }
+
+        .header-nav a {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
+            padding: 7px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .header-nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        /* ===== GNB ===== */
+        .gnb {
+            background: #fff;
+            border-bottom: 2px solid #2d8a4e;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .gnb ul {
+            display: flex;
+            list-style: none;
+            padding: 0 24px;
+        }
+
+        .gnb li a {
+            display: block;
+            padding: 14px 22px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #444;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .gnb li a:hover,
+        .gnb li.active a {
+            color: #1a5c2e;
+            border-bottom-color: #2d8a4e;
+            font-weight: 700;
+        }
+
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 8px 24px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #1a5c2e;
+        }
+
+        .breadcrumb .current {
+            color: #1a5c2e;
+            font-weight: 500;
+        }
+
+        /* ===== MAIN ===== */
+        .main-wrap {
+            max-width: 1280px;
+            margin: 20px auto;
+            padding: 0 16px 60px;
+        }
+
+        /* ===== DATA STATUS BAR ===== */
+        .data-status-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            border: 1px solid #cce8d4;
+            border-left: 4px solid #2d8a4e;
+            border-radius: 6px;
+            padding: 10px 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .data-status-bar .status-icon {
+            font-size: 18px;
+        }
+
+        .data-status-text {
+            font-size: 13px;
+            color: #2d6a42;
+        }
+
+        .data-status-text strong {
+            color: #1a5c2e;
+            font-size: 15px;
+        }
+
+        .data-update-time {
+            margin-left: auto;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .btn-refresh {
+            padding: 5px 14px;
+            background: #2d8a4e;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-refresh:hover {
+            background: #1a5c2e;
+        }
+
+        .btn-refresh:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        /* ===== FILTER BAR ===== */
+        .filter-bar {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .filter-label {
+            font-size: 11px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .filter-select,
+        .filter-input {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-size: 13px;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #fff;
+            color: #333;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .filter-select:focus,
+        .filter-input:focus {
+            border-color: #2d8a4e;
+            box-shadow: 0 0 0 2px rgba(45, 138, 78, 0.1);
+        }
+
+        .filter-input {
+            width: 200px;
+        }
+
+        .btn-filter-search {
+            padding: 7px 20px;
+            background: #1a5c2e;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            align-self: flex-end;
+        }
+
+        .btn-filter-search:hover {
+            background: #144a25;
+        }
+
+        .btn-filter-reset {
+            padding: 7px 12px;
+            background: #fff;
+            color: #555;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        .btn-filter-reset:hover {
+            background: #f5f5f5;
+        }
+
+        /* ===== PAGE TITLE ===== */
+        .page-title-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .page-title-area h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a5c2e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-title-area h2::before {
+            content: '';
+            display: inline-block;
+            width: 5px;
+            height: 22px;
+            background: #2d8a4e;
+            border-radius: 3px;
+        }
+
+        .result-count {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .result-count strong {
+            color: #1a5c2e;
+            font-size: 16px;
+        }
+
+        /* ===== RESULT CONTROLS ===== */
+        .result-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            flex-wrap: wrap;
+        }
+
+        .ctrl-select {
+            border: 1px solid #bbb;
+            border-radius: 3px;
+            padding: 4px 6px;
+            font-size: 13px;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #fff;
+            color: #333;
+        }
+
+        .btn-sort {
+            padding: 5px 14px;
+            background: #1a5c2e;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-sort:hover {
+            background: #144a25;
+        }
+
+        .controls-right {
+            margin-left: auto;
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-ctrl {
+            padding: 5px 12px;
+            background: #fff;
+            color: #444;
+            border: 1px solid #bbb;
+            border-radius: 3px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-ctrl:hover {
+            background: #f0f5f2;
+            border-color: #2d8a4e;
+        }
+
+        /* ===== RESULT TABLE ===== */
+        .result-table-wrap {
+            background: #fff;
+            border: 1px solid #ccc;
+            overflow-x: auto;
+        }
+
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        .result-table thead tr {
+            background: #eaf3ee;
+            border-bottom: 2px solid #b5ddc4;
+        }
+
+        .result-table thead th {
+            padding: 10px 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #1a5c2e;
+            text-align: center;
+            border-right: 1px solid #d0e8d8;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .result-table thead th:last-child {
+            border-right: none;
+            cursor: default;
+        }
+
+        .result-table thead th:hover:not(:last-child) {
+            background: #d8edde;
+        }
+
+        .result-table thead th .sort-arrow {
+            font-size: 10px;
+            margin-left: 3px;
+            color: #aaa;
+        }
+
+        .result-table thead th.sort-asc .sort-arrow::after {
+            content: ' ▲';
+            color: #1a5c2e;
+        }
+
+        .result-table thead th.sort-desc .sort-arrow::after {
+            content: ' ▼';
+            color: #1a5c2e;
+        }
+
+        .result-table tbody tr {
+            border-bottom: 1px solid #e8e8e8;
+            transition: background 0.15s;
+        }
+
+        .result-table tbody tr:hover {
+            background: #f5fbf7;
+        }
+
+        .result-table tbody td {
+            padding: 11px 8px;
+            vertical-align: middle;
+            font-size: 13px;
+            border-right: 1px solid #f0f0f0;
+        }
+
+        .result-table tbody td:last-child {
+            border-right: none;
+        }
+
+        /* Column widths */
+        .col-no {
+            width: 40px;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .col-addr {
+            width: auto;
+        }
+
+        .col-grade {
+            width: 60px;
+            text-align: center;
+        }
+
+        .col-area {
+            width: 110px;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .col-usbd {
+            width: 70px;
+            text-align: center;
+        }
+
+        .col-appr {
+            width: 130px;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .col-minbid {
+            width: 130px;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .col-period {
+            width: 150px;
+            text-align: center;
+        }
+
+        .col-pnu {
+            width: 150px;
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 11px;
+            color: #444;
+            background: #f9f9f9;
+        }
+
+        .col-action {
+            width: 80px;
+            text-align: center;
+        }
+
+        /* Property Info */
+        .prop-id {
+            font-size: 12px;
+            color: #0e5a9a;
+            font-weight: 700;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .prop-id:hover {
+            text-decoration: underline;
+        }
+
+        .prop-addr-text {
+            font-size: 13px;
+            color: #222;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        .prop-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tag-forest {
+            background: #e8f4e8;
+            color: #2d7a3a;
+            border: 1px solid #b8dfc0;
+        }
+
+        .tag-bid {
+            background: #fff3e0;
+            color: #b85c00;
+            border: 1px solid #f5cc8a;
+        }
+
+        .tag-org {
+            background: #e8eeff;
+            color: #2840b8;
+            border: 1px solid #a8b8f5;
+        }
+
+        .tag-quota {
+            background: #fdf2f2;
+            color: #c0392b;
+            border: 1px solid #facccc;
+            font-weight: 700;
+        }
+
+        /* Custom Multiselect */
+        .custom-multiselect {
+            position: relative;
+            width: 140px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            user-select: none;
+        }
+
+        .custom-multiselect:hover {
+            border-color: #2d8a4e;
+        }
+
+        .multiselect-selected {
+            padding: 0 10px;
+            height: 34px;
+            line-height: 34px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .multiselect-selected::after {
+            content: '▼';
+            font-size: 10px;
+            color: #888;
+            margin-left: 5px;
+            transition: transform 0.2s;
+        }
+
+        .multiselect-selected.active::after {
+            transform: rotate(180deg);
+        }
+
+        .multiselect-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: -1px;
+            width: calc(100% + 2px);
+            background: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .multiselect-dropdown.show {
+            display: block;
+        }
+
+        .multiselect-dropdown label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .multiselect-dropdown label:hover {
+            background: #eaf3ee;
+        }
+
+        .multiselect-dropdown input[type="checkbox"] {
+            margin: 0;
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+        }
+
+        /* Usbd Badge */
+        .usbd-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .usbd-2 {
+            background: #fff3e0;
+            color: #b85c00;
+            border: 1px solid #f5cc8a;
+        }
+
+        .usbd-3 {
+            background: #fde8e8;
+            color: #b82020;
+            border: 1px solid #f5a8a8;
+        }
+
+        .usbd-high {
+            background: #2d1a1a;
+            color: #ff8888;
+            border: 1px solid #7a2020;
+        }
+
+        /* Price */
+        .price-main {
+            font-size: 13px;
+            font-weight: 700;
+            color: #222;
+            white-space: nowrap;
+        }
+
+        .price-hidden {
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        .price-rate {
+            font-size: 11px;
+            color: #c0392b;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* Period */
+        .period-date {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .period-remain {
+            font-size: 11px;
+            font-weight: 700;
+            color: #cc4400;
+        }
+
+        /* Action */
+        .btn-onbid {
+            background: #1a5c2e;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            white-space: nowrap;
+            transition: background 0.15s;
+        }
+
+        .btn-onbid:hover {
+            background: #144a25;
+        }
+
+        /* ===== EMPTY / LOADING STATES ===== */
+        .state-box {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .state-box .state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .state-box p {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .state-box .state-hint {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 8px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #2d8a4e;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 12px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ===== PAGINATION ===== */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-top: 1px solid #e0e0e0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-count-badge {
+            background: #eaf3ee;
+            color: #1a5c2e;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            border: 1px solid #b5ddc4;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            flex-grow: 1;
+        }
+
+        .page-btn {
+            min-width: 32px;
+            height: 32px;
+            padding: 0 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 13px;
+            cursor: pointer;
+            background: #fff;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+
+        .page-btn:hover {
+            background: #eaf3ee;
+            border-color: #2d8a4e;
+            color: #1a5c2e;
+        }
+
+        .page-btn.active {
+            background: #1a5c2e;
+            color: #fff;
+            border-color: #1a5c2e;
+            font-weight: 700;
+        }
+
+        .page-btn.arrow {
+            font-size: 16px;
+            color: #888;
+        }
+
+        .page-btn:disabled,
+        .page-btn[data-disabled="true"] {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .page-info {
+            font-size: 12px;
+            color: #888;
+            margin: 0 8px;
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            background: #1a2e1e;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            margin-top: 24px;
+        }
+
+        .site-footer strong {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+                width: 100%;
+            }
+
+            .main-wrap {
+                margin: 0 auto;
+                padding: 0 8px 40px;
+                overflow-x: hidden;
+            }
+
+            .header-nav {
+                display: none;
+            }
+
+            .logo-text h1 {
+                font-size: 17px;
+            }
+
+            .logo-emblem {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .filter-input, .custom-multiselect, .filter-select {
+                width: 100% !important;
+            }
+
+            .btn-filter-search,
+            .btn-filter-reset {
+                width: 100%;
+                padding: 12px;
+            }
+
+            .result-controls {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .controls-right {
+                margin-left: 0;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            /* Card Structure Fix */
+            .result-table-wrap {
+                border: none;
+                background: transparent;
+                overflow-x: hidden;
+            }
+
+            .result-table {
+                display: block;
+                min-width: 0 !important;
+                width: 100% !important;
+            }
+
+            .result-table thead {
+                display: none;
+            }
+
+            .result-table tbody {
+                display: block;
+                width: 100%;
+            }
+
+            .result-table tbody tr {
+                display: flex;
+                flex-wrap: wrap;
+                margin-bottom: 20px;
+                border: 1px solid #e0e0e0;
+                border-radius: 12px;
+                background: #fff;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                overflow: hidden;
+                width: 100%;
+            }
+
+            .result-table tbody td {
+                border: none;
+                padding: 12px 4px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                min-height: 60px;
+                border-bottom: 1px solid #f5f5f5;
+                box-sizing: border-box;
+            }
+
+            .result-table tbody td::before {
+                content: attr(data-label);
+                font-size: 10px;
+                color: #888;
+                font-weight: 500;
+                margin-bottom: 3px;
+                margin-right: 0;
+            }
+
+            /* Hide non-essential */
+            .col-no, .col-pnu {
+                display: none !important;
+            }
+
+            /* Area Highlight: Address (Full Width) */
+            .result-table tbody td.col-addr {
+                width: 100% !important;
+                order: 1;
+                display: block;
+                background: #f8fbf9;
+                padding: 16px;
+                text-align: left;
+                border-bottom: 2px solid #eaf3ee;
+                min-height: auto;
+            }
+            .result-table tbody td.col-addr::before { display: none; }
+            .prop-addr-text { font-size: 14px; font-weight: 700; color: #1a5c2e; margin-bottom: 8px; line-height: 1.4; }
+
+            /* Row 1: Grade, Area, Count (33.33%) */
+            .col-grade { width: 33.33% !important; order: 2; border-right: 1px solid #f5f5f5 !important; }
+            .col-area  { width: 33.33% !important; order: 3; border-right: 1px solid #f5f5f5 !important; }
+            .col-usbd  { width: 33.34% !important; order: 4; }
+
+            /* Row 2: Price & Period Info (33.33% each) */
+            .col-appr   { width: 33.33% !important; order: 5; border-right: 1px solid #f5f5f5 !important; }
+            .col-minbid { width: 33.33% !important; order: 6; border-right: 1px solid #f5f5f5 !important; }
+            .col-period { 
+                width: 33.34% !important; 
+                order: 7; 
+                flex-direction: column; 
+                justify-content: center;
+                background: #fff;
+            }
+            .col-period::before { margin-bottom: 3px; }
+            .price-main { font-size: 13px; font-weight: 700; }
+            .price-rate { font-size: 9px; margin-top: 1px; }
+            .period-date { text-align: center; line-height: 1.1; font-size: 10px; }
+            .period-remain { font-size: 10px; }
+
+            /* Row 3: Action Button */
+            .col-action {
+                width: 100% !important;
+                order: 8;
+                padding: 10px 16px;
+                border-bottom: none;
+                min-height: auto;
+            }
+            .col-action::before { display: none; }
+            .btn-onbid {
+                width: 100%;
+                padding: 12px;
+                background: linear-gradient(135deg, #1a5c2e 0%, #2d8a4e 100%);
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 700;
+            }
+
+            .pagination { padding: 15px; flex-direction: column; gap: 12px; }
+            .pagination-buttons { width: 100%; justify-content: space-between; gap: 4px; }
+            .page-btn { padding: 0; min-width: 30px; height: 30px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+        <div class="header-top-bar">
+            <span>🌲 산림청 공식 시스템 | Korea Forest Service</span>
+            <div>
+                <a href="#">로그인</a>
+                <a href="#">회원가입</a>
+                <a href="#">사이트맵</a>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="logo-area">
+                <div class="logo-emblem">🌳</div>
+                <div class="logo-text">
+                    <h1>산지연금 대상 토지 검토 시스템</h1>
+                    <p>산림청 | Korea Forest Service — 산지매수사업 대상지 검토 플랫폼</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <a href="#">📋 사업안내</a>
+                <a href="#">📂 신청서류</a>
+                <a href="#">❓ FAQ</a>
+                <a href="#">📞 문의</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== GNB ===== -->
+    <nav class="gnb">
+        <ul>
+            <li><a href="about.html">사업소개</a></li>
+            <li class="active"><a href="index.html">산지 공매 검색</a></li>
+            <li><a href="#">자료실</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===== BREADCRUMB ===== -->
+    <div class="breadcrumb">
+        <a href="index.html">홈</a> <span>›</span>
+        <span class="current">산지 공매 결과</span>
+    </div>
+
+    <!-- ===== MAIN ===== -->
+    <div class="main-wrap">
+
+        <!-- Data Status Bar -->
+        <div class="data-status-bar" id="statusBar">
+            <span class="status-icon">🔄</span>
+            <div class="data-status-text">
+                데이터 로딩 중... <span id="statusCount"></span>
+            </div>
+            <span class="data-update-time" id="updateTime"></span>
+            <button class="btn-refresh" id="btnRefresh" onclick="reloadData()" disabled>🔃 새로고침</button>
+        </div>
+
+        <!-- Page Title -->
+        <div class="page-title-area">
+            <h2>온비드 산지 공매 현황</h2>
+            <div class="result-count" id="resultCountArea">
+                총 <strong id="resultCount">0</strong>건 (유찰 2회 이상 임야)
+            </div>
+        </div>
+
+        <!-- ===== FILTER BAR ===== -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <span class="filter-label">지역</span>
+                <select class="filter-select" id="filterSido" style="width:130px;" onchange="updateSigunguList()">
+                    <option value="">전체(지자체)</option>
+                    <option value="강원">강원특별자치도</option>
+                    <option value="경기">경기도</option>
+                    <option value="충북">충청북도</option>
+                    <option value="충남">충청남도</option>
+                    <option value="전북">전북특별자치도</option>
+                    <option value="전남">전라남도</option>
+                    <option value="경북">경상북도</option>
+                    <option value="경남">경상남도</option>
+                    <option value="제주">제주특별자치도</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">시/군</span>
+                <select class="filter-select" id="filterSigungu" style="width:120px;">
+                    <option value="">전체(시/군)</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">지분 물건 여부</span>
+                <select class="filter-select" id="filterAlcYn" style="width:100px;">
+                    <option value="">전체</option>
+                    <option value="N" selected>일반 물건</option>
+                    <option value="Y">지분 물건</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">최소 유찰 횟수</span>
+                <select class="filter-select" id="filterUsbdMin" style="width:100px;">
+                    <option value="2">2회 이상</option>
+                    <option value="3">3회 이상</option>
+                    <option value="5">5회 이상</option>
+                    <option value="10">10회 이상</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">등급</span>
+                <div class="custom-multiselect" id="gradeMultiselect">
+                    <div class="multiselect-selected" id="gradeMultiselectHeader" onclick="toggleGradeDropdown(event)">
+                        <span id="selectedGradeText">전체(등급)</span>
+                    </div>
+                    <div class="multiselect-dropdown" id="gradeDropdown">
+                        <label><input type="checkbox" name="fGrade" value="S" onchange="updateMultiselectText()">
+                            S등급</label>
+                        <label><input type="checkbox" name="fGrade" value="A" onchange="updateMultiselectText()">
+                            A등급</label>
+                        <label><input type="checkbox" name="fGrade" value="B" onchange="updateMultiselectText()">
+                            B등급</label>
+                        <label><input type="checkbox" name="fGrade" value="C" onchange="updateMultiselectText()">
+                            C등급</label>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">지번주소 검색 (온비드 매칭용)</span>
+                <div style="display:flex; gap:4px; align-items:center;">
+                    <input type="text" class="filter-input" id="filterAddr" placeholder="가져온 지번주소를 입력">
+                    <button class="btn-filter-reset" onclick="openJusoModal()"
+                        style="font-weight:bold; color:#1a5c2e;">🌐 주소찾기</button>
+                </div>
+            </div>
+            <button class="btn-filter-search" onclick="applyFilters()">🔍 검색</button>
+            <button class="btn-filter-reset" onclick="resetFilters()">초기화</button>
+        </div>
+
+        <!-- Result Controls -->
+        <div class="result-controls">
+            <select class="ctrl-select" id="sortSelect" onchange="applySort()">
+                <option value="gradeDesc">등급 높은순</option>
+                <option value="usbdDesc">유찰 많은순</option>
+
+
+                <option value="usbdAsc">유찰 적은순</option>
+                <option value="apprDesc">감정가 높은순</option>
+                <option value="apprAsc">감정가 낮은순</option>
+                <option value="minbidDesc">최저가 높은순</option>
+                <option value="minbidAsc">최저가 낮은순</option>
+                <option value="bidEdAsc">입찰마감 빠른순</option>
+            </select>
+            <select class="ctrl-select" id="pageSize" onchange="changePageSize()">
+                <option value="10">10줄씩</option>
+                <option value="20" selected>20줄씩</option>
+                <option value="50">50줄씩</option>
+            </select>
+            <button class="btn-sort" onclick="applySort()">정렬</button>
+            <div class="controls-right">
+                <button class="btn-ctrl" onclick="exportCSV()">📥 CSV 다운로드</button>
+                <button class="btn-ctrl" onclick="window.open('https://www.onbid.co.kr','_blank')">🌐 온비드 바로가기</button>
+            </div>
+        </div>
+
+        <!-- Result Table -->
+        <div class="result-table-wrap">
+            <table class="result-table" id="resultTable">
+                <thead>
+                    <tr>
+                        <th class="col-no">No.</th>
+                        <th class="col-addr" onclick="sortByCol('addr')">소재지 / 물건정보 <span class="sort-arrow"></span>
+                        </th>
+                        <th class="col-pnu" onclick="sortByCol('pnu')">PNU 코드 <span class="sort-arrow"></span></th>
+                        <th class="col-area" onclick="sortByCol('area')">면적(㎡) <span class="sort-arrow"></span></th>
+                        <th class="col-usbd" onclick="sortByCol('usbdCnt')">유찰<br>횟수 <span class="sort-arrow"></span>
+                        </th>
+                        <th class="col-grade" onclick="sortByCol('grade')">등급 <span class="sort-arrow"></span></th>
+                        <th class="col-appr" onclick="sortByCol('apprAmtRaw')">감정가 <span class="sort-arrow"></span></th>
+                        <th class="col-minbid" onclick="sortByCol('minBidAmtRaw')">최저입찰가 <span
+                                class="sort-arrow"></span></th>
+                        <th class="col-period" onclick="sortByCol('bidEdDt')">입찰기간 <span class="sort-arrow"></span></th>
+                        <th class="col-action">온비드</th>
+                    </tr>
+                </thead>
+                <tbody id="resultBody">
+                    <tr>
+                        <td colspan="10">
+                            <div class="state-box">
+                                <div class="spinner"></div>
+                                <p>데이터를 불러오는 중입니다...</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="paginationArea"></div>
+
+    </div><!-- /main-wrap -->
+
+    <!-- ===== JUSO API MODAL ===== -->
+    <div id="jusoModal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+        <div
+            style="background:#fff; width:90%; max-width:640px; border-radius:8px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 style="color:#1a5c2e; font-size:18px; margin:0;">🌐 온비드 매칭용 전체 지번주소 찾기</h3>
+                <button onclick="closeJusoModal()"
+                    style="border:none; background:none; font-size:20px; cursor:pointer; color:#666;">✖</button>
+            </div>
+
+            <form name="jusoForm" id="jusoForm" onsubmit="event.preventDefault();"
+                style="display:flex; gap:6px; margin-bottom:16px;">
+                <input type="hidden" name="currentPage" value="1" />
+                <input type="hidden" name="countPerPage" value="20" />
+                <!-- 개발계/상용계 신청 승인키 (실제 환경에서는 본인 승인키로 교체해야 정상 검색됩니다.) -->
+                <input type="hidden" name="confmKey" value="TESTJUSOGOKR" />
+
+                <input type="text" name="keyword" id="jusoKeyword" placeholder="원하시는 주소를 입력하세요 (도/시/군 + 상호/지번 등)"
+                    style="flex:1; padding:10px 12px; font-size:14px; border:1px solid #ccc; border-radius:4px;"
+                    onkeydown="jusoEnterSearch(event);" />
+                <button type="button" onClick="getAddr();"
+                    style="padding:0 24px; background:#1a5c2e; color:#fff; border:none; border-radius:4px; font-weight:700; cursor:pointer;">주소검색하기</button>
+            </form>
+
+            <div id="jusoList"
+                style="max-height:450px; overflow-y:auto; border:1px solid #eee; border-radius:4px; padding:8px;">
+                <div style="padding:40px 10px; text-align:center; color:#888; font-size:13px; line-height:1.6;">
+                    원하시는 주소를 검색하신 후,<br>정확히 매칭되는 <strong style="color:#1a5c2e;">전체 지번 주소</strong>를 선택하면 웹사이트 주소창에
+                    기입됩니다.<br><br>
+                    <span style="color:#c0392b;">(※ 현재 <b>TESTJUSOGOKR</b> 키가 적용되어 있어, 테스트용 더미 주소만 반환될 수 있습니다.)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <strong>산림청 산지 공매 검색 시스템</strong> | Korea Forest Service<br>
+        데이터 출처: 온비드(onbid.go.kr) 공공데이터 API | 매일 자동 갱신<br>
+        Copyright © Korea Forest Service. All rights reserved.
+    </footer>
+
+    <!-- ===== onbid 데이터 JS (Python 스크립트로 자동 생성) ===== -->
+    <script src="onbid_data.js" onerror="handleDataError()"></script>
+
+
+    <script>
+        // ─────────────────────────────────────────────
+        // 전역 상태
+        // ─────────────────────────────────────────────
+        let allItems = [];   // 원본 전체
+        let filteredItems = [];   // 필터 적용 후
+        let currentPage = 1;
+        let pageSize = 20;
+        let sortCol = 'grade';
+        let sortDir = 'desc';    // 'asc' | 'desc'
+
+        // ─────────────────────────────────────────────
+        // 초기화
+        // ─────────────────────────────────────────────
+        function init() {
+            try {
+                if (typeof ONBID_DATA !== 'undefined' && ONBID_DATA && Array.isArray(ONBID_DATA.items)) {
+                    allItems = ONBID_DATA.items;
+                    filteredItems = [...allItems];
+
+                    // 상태바 갱신
+                    document.getElementById('statusBar').style.borderLeftColor = '#2d8a4e';
+                    document.getElementById('statusBar').querySelector('.status-icon').textContent = '✅';
+                    document.getElementById('statusBar').querySelector('.data-status-text').innerHTML =
+                        `온비드 공매 데이터 로드 완료 &nbsp;|&nbsp; <strong>${allItems.length}건</strong> (유찰 2회 이상 임야)`;
+                    document.getElementById('updateTime').textContent = `최종 갱신: ${ONBID_DATA.updatedAt || '알 수 없음'}`;
+                    document.getElementById('btnRefresh').disabled = false;
+                } else {
+                    handleDataError();
+                }
+            } catch (e) {
+                console.error('ONBID_DATA 로드 오류:', e);
+                handleDataError();
+            }
+            applyFilters();
+        }
+
+        function handleDataError() {
+            allItems = [];
+            filteredItems = [];
+            document.getElementById('statusBar').style.borderLeftColor = '#e05a5a';
+            document.getElementById('statusBar').querySelector('.status-icon').textContent = '⚠️';
+            document.getElementById('statusBar').querySelector('.data-status-text').innerHTML =
+                '<strong style="color:#c0392b;">데이터 파일(onbid_data.js)을 찾을 수 없습니다.</strong> &nbsp;→ fetch_onbid.py를 먼저 실행하세요.';
+            document.getElementById('btnRefresh').disabled = false;
+
+            document.getElementById('resultBody').innerHTML = `
+            <tr><td colspan="10">
+                <div class="state-box">
+                    <div class="state-icon">📂</div>
+                    <p><strong>데이터 파일이 없습니다.</strong><br>
+                    <code>fetch_onbid.py</code>를 실행하면 <code>onbid_data.js</code>가 생성됩니다.</p>
+                    <p class="state-hint">명령 프롬프트에서: python fetch_onbid.py<br>또는 run_fetch.bat 실행</p>
+                </div>
+            </td></tr>`;
+            document.getElementById('resultCount').textContent = '0';
+        }
+
+        function reloadData() {
+            location.reload();
+        }
+
+        // ─────────────────────────────────────────────
+        // 필터링
+        // ─────────────────────────────────────────────
+        function applyFilters() {
+            const sido = document.getElementById('filterSido').value.trim();
+            const sigungu = document.getElementById('filterSigungu').value.trim();
+            const alcYn = document.getElementById('filterAlcYn').value;
+            const usbdMin = parseInt(document.getElementById('filterUsbdMin').value) || 2;
+            const addrKw = document.getElementById('filterAddr').value.trim();
+            const checkedGrades = Array.from(document.querySelectorAll('input[name="fGrade"]:checked')).map(cb => cb.value);
+
+            filteredItems = allItems.filter(item => {
+                const addr = item.addr || '';
+                const itemSido = item.sido || '';
+                const itemSigungu = item.sigungu || ''; // If not in data, we can parse from addr
+                const itemAlcYn = item.alcYn || 'N';
+                const itemGrade = item.grade || '';
+
+                if (sido && !itemSido.includes(sido)) return false;
+
+                // If sigungu filter is active, check against itemSigungu. 
+                // Fallback: if sigungu is not in JSON, extract first 2 words from addr
+                if (sigungu) {
+                    if (itemSigungu) {
+                        if (itemSigungu !== sigungu) return false;
+                    } else {
+                        if (!addr.includes(sigungu)) return false;
+                    }
+                }
+
+                if (alcYn && itemAlcYn !== alcYn) return false;
+                if ((item.usbdCnt || 0) < usbdMin) return false;
+                if (addrKw && !addr.includes(addrKw)) return false;
+                if (checkedGrades.length > 0 && !checkedGrades.includes(itemGrade)) return false;
+                return true;
+            });
+
+            currentPage = 1;
+            sortAndRender();
+        }
+
+        function updateSigunguList() {
+            const sidoVal = document.getElementById('filterSido').value;
+            const sigunguSelect = document.getElementById('filterSigungu');
+
+            // Clear current list
+            sigunguSelect.innerHTML = '<option value="">전체(시/군)</option>';
+
+            if (!sidoVal) return;
+
+            // Extract unique sigungu from allItems for the selected sido
+            const sigunguSet = new Set();
+            allItems.forEach(item => {
+                if (item.sido && item.sido.includes(sidoVal)) {
+                    // Try item.sigungu first, then parse from addr
+                    if (item.sigungu) {
+                        sigunguSet.add(item.sigungu);
+                    } else if (item.addr) {
+                        const parts = item.addr.split(' ');
+                        // addr is usually "Sido Sigungu ..."
+                        if (parts.length > 1) sigunguSet.add(parts[1]);
+                    }
+                }
+            });
+
+            const sortedSigungu = Array.from(sigunguSet).sort();
+            sortedSigungu.forEach(sg => {
+                const opt = document.createElement('option');
+                opt.value = sg;
+                opt.textContent = sg;
+                sigunguSelect.appendChild(opt);
+            });
+        }
+
+        function resetFilters() {
+            document.getElementById('filterSido').value = '';
+            document.getElementById('filterSigungu').innerHTML = '<option value="">전체(시/군)</option>';
+            document.getElementById('filterAlcYn').value = 'N';
+            document.getElementById('filterUsbdMin').value = '2';
+            document.getElementById('filterAddr').value = '';
+            document.querySelectorAll('input[name="fGrade"]').forEach(cb => cb.checked = false);
+            updateMultiselectText();
+            applyFilters();
+        }
+
+        // ─────────────────────────────────────────────
+        // 멀티셀렉트 도우미
+        // ─────────────────────────────────────────────
+        function toggleGradeDropdown(e) {
+            if (e) e.stopPropagation();
+            document.getElementById('gradeDropdown').classList.toggle('show');
+            document.getElementById('gradeMultiselectHeader').classList.toggle('active');
+        }
+
+        function updateMultiselectText() {
+            const checked = Array.from(document.querySelectorAll('input[name="fGrade"]:checked')).map(cb => cb.value);
+            const display = document.getElementById('selectedGradeText');
+            if (checked.length === 0) {
+                display.textContent = '전체(등급)';
+            } else if (checked.length === 4) {
+                display.textContent = '전체 등급';
+            } else {
+                display.textContent = checked.join(', ') + ' 등급';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function (event) {
+            if (!event.target.closest('#gradeMultiselect')) {
+                document.getElementById('gradeDropdown').classList.remove('show');
+                document.getElementById('gradeMultiselectHeader').classList.remove('active');
+            }
+        });
+
+        // ─────────────────────────────────────────────
+        // 정렬
+        // ─────────────────────────────────────────────
+        function applySort() {
+            const v = document.getElementById('sortSelect').value;
+            if (v === 'usbdDesc') { sortCol = 'usbdCnt'; sortDir = 'desc'; }
+            else if (v === 'usbdAsc') { sortCol = 'usbdCnt'; sortDir = 'asc'; }
+            else if (v === 'apprDesc') { sortCol = 'apprAmtRaw'; sortDir = 'desc'; }
+            else if (v === 'apprAsc') { sortCol = 'apprAmtRaw'; sortDir = 'asc'; }
+            else if (v === 'minbidDesc') { sortCol = 'minBidAmtRaw'; sortDir = 'desc'; }
+            else if (v === 'minbidAsc') { sortCol = 'minBidAmtRaw'; sortDir = 'asc'; }
+            else if (v === 'bidEdAsc') { sortCol = 'bidEdDt'; sortDir = 'asc'; }
+            else if (v === 'gradeDesc') { sortCol = 'grade'; sortDir = 'desc'; }
+
+            currentPage = 1;
+            sortAndRender();
+        }
+
+        function sortByCol(col) {
+            if (sortCol === col) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+            else { sortCol = col; sortDir = 'desc'; }
+            currentPage = 1;
+            sortAndRender();
+        }
+
+        function sortAndRender() {
+            const dir = sortDir === 'asc' ? 1 : -1;
+
+            filteredItems.sort((a, b) => {
+                let va = a[sortCol] ?? '';
+                let vb = b[sortCol] ?? '';
+
+                // 등급 정렬 (S > A > B > C)
+                if (sortCol === 'grade') {
+                    const priority = { 'S': 4, 'A': 3, 'B': 2, 'C': 1, '-': 0 };
+                    const pa = priority[va] ?? 0;
+                    const pb = priority[vb] ?? 0;
+                    return (pa - pb) * dir;
+                }
+
+                if (typeof va === 'string' && typeof vb === 'string') {
+                    return va.localeCompare(vb, 'ko') * dir;
+                }
+                return (va - vb) * dir;
+            });
+
+
+            // 헤더 화살표 갱신
+            document.querySelectorAll('.result-table thead th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+
+            renderTable();
+            renderPagination();
+        }
+
+        function changePageSize() {
+            pageSize = parseInt(document.getElementById('pageSize').value);
+            currentPage = 1;
+            renderTable();
+            renderPagination();
+        }
+
+        // ─────────────────────────────────────────────
+        // 테이블 렌더링
+        // ─────────────────────────────────────────────
+        function renderTable() {
+            const tbody = document.getElementById('resultBody');
+            document.getElementById('resultCount').textContent = filteredItems.length.toLocaleString();
+
+            if (filteredItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10">
+                <div class="state-box">
+                    <div class="state-icon">🔍</div>
+                    <p>검색 조건에 맞는 물건이 없습니다.<br>조건을 변경하거나 초기화 버튼을 눌러보세요.</p>
+                </div>
+            </td></tr>`;
+                return;
+            }
+
+            const start = (currentPage - 1) * pageSize;
+            const end = Math.min(start + pageSize, filteredItems.length);
+            const rows = filteredItems.slice(start, end);
+
+            tbody.innerHTML = rows.map((item, idx) => buildRow(item, start + idx + 1)).join('');
+        }
+
+        function buildRow(item, no) {
+            // 유찰 배지 색상
+            let usbdClass = 'usbd-2';
+            if (item.usbdCnt >= 10) usbdClass = 'usbd-high';
+            else if (item.usbdCnt >= 3) usbdClass = 'usbd-3';
+
+            // 입찰기간 남은날
+            const remainHtml = calcRemain(item.bidEdDt);
+
+            // 감정가 낙찰률
+            let rateHtml = '';
+            if (item.apprAmtRaw > 0 && item.minBidAmtRaw > 0) {
+                const rate = ((item.minBidAmtRaw / item.apprAmtRaw) * 100).toFixed(0);
+                rateHtml = `<div class="price-rate">감정가 대비 ${rate}%</div>`;
+            }
+
+            // 면적
+            const area = item.area ? `${parseFloat(item.area).toLocaleString('ko')} ㎡` : '-';
+
+            return `
+        <tr>
+            <td class="col-no" data-label="No.">${no}</td>
+            <td class="col-addr">
+                <a href="#" onclick="goOnbid('${item.cltrNo}','${item.pbctNo}');return false;" class="prop-id">${escHtml(item.cltrNo || '-')}</a>
+                <div class="prop-addr-text">${escHtml(item.addr || '-')}</div>
+                <div class="prop-tags">
+                    <span class="tag tag-forest">임야</span>
+                    ${item.alcYn === 'Y' ? '<span class="tag tag-quota">지분</span>' : ''}
+                    <span class="tag tag-bid">${escHtml(item.bidDivNm || '일반입찰')}</span>
+                    ${item.orgNm ? `<span class="tag tag-org">${escHtml(item.orgNm)}</span>` : ''}
+                </div>
+            </td>
+            <td class="col-pnu" data-label="PNU 코드">
+                ${item.pnu && item.pnu !== 'NOT_FOUND' ? `<div style="font-weight:bold; color:#1a5c2e;">${item.pnu}</div>` : '<span style="color:#ccc">매칭실패</span>'}
+            </td>
+            <td class="col-area" data-label="면적">${area}</td>
+            <td class="col-usbd" data-label="유찰횟수"><span class="usbd-badge ${usbdClass}">${item.usbdCnt}회</span></td>
+            <td class="col-grade" data-label="등급" style="text-align:center; font-weight:bold; color:#1a5c2e;">
+                ${item.grade && item.grade !== '-' ? item.grade : 'C'}
+            </td>
+
+            <td class="col-appr" data-label="감정가">
+                <div class="price-main">${escHtml(item.apprAmt || '-')}</div>
+            </td>
+            <td class="col-minbid" data-label="최저입찰가">
+                <div class="price-main">${escHtml(item.minBidAmt || '-')}</div>
+                ${rateHtml}
+            </td>
+            <td class="col-period" data-label="입찰기간">
+                ${remainHtml}
+                <div class="period-date">
+                    ${fmtDate(item.bidBgDt)}<br>
+                    <span style="color:#aaa">~</span><br>
+                    ${fmtDate(item.bidEdDt)}
+                </div>
+            </td>
+            <td class="col-action">
+                <a href="#" onclick="goOnbid('${item.cltrNo}','${item.pbctNo}');return false;" class="btn-onbid">상세보기</a>
+            </td>
+        </tr>`;
+        }
+
+        // ─────────────────────────────────────────────
+        // 페이지네이션
+        // ─────────────────────────────────────────────
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredItems.length / pageSize);
+            const el = document.getElementById('paginationArea');
+
+            // 상단 카운트 영역 외에 하단에도 표시하기 위해 준비
+            const countHtml = `<div class="filter-count-badge">검색 결과: <strong>${filteredItems.length.toLocaleString()}</strong>건</div>`;
+
+            if (totalPages <= 1) {
+                el.innerHTML = countHtml;
+                return;
+            }
+
+            const blockSize = 10;
+            const blockStart = Math.floor((currentPage - 1) / blockSize) * blockSize + 1;
+            const blockEnd = Math.min(blockStart + blockSize - 1, totalPages);
+
+            let btnHtml = '<div class="pagination-buttons">';
+            btnHtml += `<button class="page-btn arrow" onclick="goPage(1)" ${currentPage === 1 ? 'data-disabled="true"' : ''}>◀◀</button>`;
+            btnHtml += `<button class="page-btn arrow" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'data-disabled="true"' : ''}>◀</button>`;
+
+            for (let i = blockStart; i <= blockEnd; i++) {
+                btnHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+            }
+
+            btnHtml += `<button class="page-btn arrow" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'data-disabled="true"' : ''}>▶</button>`;
+            btnHtml += `<button class="page-btn arrow" onclick="goPage(${totalPages})" ${currentPage === totalPages ? 'data-disabled="true"' : ''}>▶▶</button>`;
+            btnHtml += `</div><span class="page-info">${currentPage} / ${totalPages} 페이지</span>`;
+
+            el.innerHTML = countHtml + btnHtml;
+        }
+
+        function goPage(p) {
+            const totalPages = Math.ceil(filteredItems.length / pageSize);
+            if (p < 1 || p > totalPages) return;
+            currentPage = p;
+            renderTable();
+            renderPagination();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ─────────────────────────────────────────────
+        // CSV 다운로드
+        // ─────────────────────────────────────────────
+        function exportCSV() {
+            if (filteredItems.length === 0) { alert('내보낼 데이터가 없습니다.'); return; }
+            const headers = ['물건번호', '소재지', '면적', '유찰횟수', '등급', '감정가', '최저입찰가', '입찰시작', '입찰마감', 'PNU코드', '집행기관'];
+            const rows = filteredItems.map(item => [
+                item.cltrNo, item.addr, item.area,
+                item.usbdCnt, item.grade || '-', item.apprAmt, item.minBidAmt,
+                item.bidBgDt, item.bidEdDt, item.pnu || '', item.orgNm
+            ].map(v => `"${String(v || '').replace(/"/g, '""')}"`));
+
+            const csv = '\uFEFF' + [headers, ...rows].map(r => r.join(',')).join('\r\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `onbid_forest_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        // ─────────────────────────────────────────────
+        // 온비드 물건 조회 연결
+        // ─────────────────────────────────────────────
+        function goOnbid(cltrMngNo, pbctCdtnNo) {
+            const win = window.open('about:blank', '_blank');
+            if (!win) {
+                alert('팝업이 차단되었습니다. 팝업 허용 후 다시 시도해 주세요.');
+                return;
+            }
+            // 배열+join 방식으로 작성 (template literal 내 script 태그 충돌 방지)
+            const sc = 'script';
+            const html = [
+                '<!DOCTYPE html>',
+                '<html><head><meta charset="UTF-8">',
+                '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
+                '<title>온비드 물건 조회 - ' + cltrMngNo + '</title>',
+                '<style>',
+                '*{margin:0;padding:0;box-sizing:border-box;}',
+                'body{font-family:sans-serif;background:#f0f4f8;padding:24px;}',
+                '.card{background:#fff;border-radius:10px;padding:24px 28px;max-width:620px;margin:0 auto;',
+                '  box-shadow:0 4px 16px rgba(0,0,0,0.1);border-left:5px solid #2d8a4e;}',
+                'h2{color:#1a5c2e;font-size:18px;margin-bottom:16px;}',
+                '.num-box{background:#e8f4e8;border:1px solid #b8ddc3;border-radius:6px;',
+                '  padding:10px 16px;font-size:16px;font-weight:700;color:#1a5c2e;',
+                '  display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}',
+                '.copy-btn{background:#1a5c2e;color:#fff;border:none;padding:6px 14px;',
+                '  border-radius:4px;font-size:13px;cursor:pointer;}',
+                '.copy-btn:hover{background:#144a25;}',
+                '.guide{background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;',
+                '  padding:14px 16px;font-size:13px;color:#614700;line-height:1.9;margin-bottom:16px;}',
+                '.guide strong{color:#1a5c2e;}',
+                '.guide ol{margin:6px 0 0 18px;}',
+                '.btn-onbid{display:block;text-align:center;background:#1a5c2e;color:#fff;',
+                '  text-decoration:none;padding:12px;border-radius:6px;font-size:15px;font-weight:700;}',
+                '.btn-onbid:hover{background:#144a25;}',
+                '.copied{color:#2d8a4e;font-size:12px;margin-left:8px;display:none;}',
+                '@media (max-width: 600px) {',
+                '  body { padding: 0; background: #fff; }',
+                '  .card { max-width: 100%; border-radius: 0; border-left: none; border-top: 5px solid #2d8a4e; box-shadow: none; padding: 20px; margin: 0; min-height: 100vh; }',
+                '  h2 { font-size: 1.2rem; }',
+                '  .num-box { flex-direction: column; gap: 10px; text-align: center; }',
+                '  .copy-btn { width: 100%; padding: 10px; }',
+                '}',
+                '</style></head><body>',
+                '<div class="card">',
+                '  <h2>🌲 온비드 물건 조회</h2>',
+                '  <div class="num-box">',
+                '    <span>' + cltrMngNo + '</span>',
+                '    <span>',
+                '      <button class="copy-btn" onclick="doCopy()">📋 번호 복사</button>',
+                '      <span class="copied" id="copiedMsg">✓ 복사됨</span>',
+                '    </span>',
+                '  </div>',
+                '  <div class="guide">',
+                '    <strong>📌 온비드에서 해당 물건 조회 방법 (3단계)</strong>',
+                '    <ol>',
+                '      <li>아래 <strong>[온비드 열기]</strong> 버튼 클릭</li>',
+                '      <li>온비드 검색 화면 상단 <strong>"상세보기"</strong> 클릭 →',
+                '          <strong>물건관리번호</strong> 입력란에 <strong>' + cltrMngNo + '</strong> 붙여넣기(Ctrl+V)</li>',
+                '      <li><strong>[검색]</strong> 버튼 클릭 → 해당 물건 1건 조회</li>',
+                '    </ol>',
+                '  </div>',
+                '  <a class="btn-onbid" href="#" onclick="openOnbid(); return false;">',
+                '    🔗 온비드 앱 열기',
+                '  </a>',
+                '  <div style="margin-top:12px; text-align:center;">',
+                '    <a href="https://m.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=' + cltrMngNo + '&pbctCdtnNo=' + pbctCdtnNo + '" target="_blank" ',
+                '       style="font-size:12px; color:#888; text-decoration:underline;">앱에서 안 열릴 경우 (모바일 웹으로 보기)</a>',
+                '  </div>',
+                '</div>',
+                '<' + sc + '>',
+                '  var cltrMngNo = "' + cltrMngNo + '";',
+                '  var pbctCdtnNo = "' + pbctCdtnNo + '";',
+                '  var numText = cltrMngNo;',
+                '  function openOnbid() {',
+                '    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);',
+                '    if (isMobile) {',
+                '      if (/Android/i.test(navigator.userAgent)) {',
+                '        // 안드로이드 공식 앱(Smart OnBid) 호출 정보 (패키지명: net.ib.asp.android.kamco.mb)',
+                '        // 온비드 공식 모바일 웹 사이트에서 사용하는 intent 규격을 적용합니다.',
+                '        window.location.href = "intent://smartOnbid#Intent;scheme=bill;package=net.ib.asp.android.kamco.mb;end;";',
+                '      } else {',
+                '        // iOS(iPhone/iPad) 공식 앱 호출 (App ID: 481188715, Scheme: bill)',
+                '        var clickedAt = +new Date();',
+                '        window.location.href = "bill://smartOnbid";',
+                '        setTimeout(function() {',
+                '          if (+new Date() - clickedAt < 2000) {',
+                '            window.location.href = "https://apps.apple.com/kr/app/id481188715";',
+                '          }',
+                '        }, 1500);',
+                '      }',
+                '    } else {',
+                '      window.open("https://www.onbid.co.kr/op/cta/cltrdtl/collateralDetailRealEstateList.do", "_blank");',
+                '    }',
+                '  }',
+                '  function doCopy() {',
+                '    if (navigator.clipboard) {',
+                '      navigator.clipboard.writeText(numText).then(showCopied).catch(fallbackCopy);',
+                '    } else { fallbackCopy(); }',
+                '  }',
+                '  function fallbackCopy() {',
+                '    var t = document.createElement("textarea");',
+                '    t.value = numText; document.body.appendChild(t); t.select();',
+                '    document.execCommand("copy"); document.body.removeChild(t); showCopied();',
+                '  }',
+                '  function showCopied() {',
+                '    var el = document.getElementById("copiedMsg");',
+                '    el.style.display = "inline";',
+                '    setTimeout(function(){ el.style.display = "none"; }, 2500);',
+                '  }',
+                '  window.onload = function() { doCopy(); };',
+                '</' + sc + '>',
+                '</body></html>'
+            ].join('\n');
+            win.document.write(html);
+            win.document.close();
+        }
+
+        // ─────────────────────────────────────────────
+        // 유틸리티
+        // ─────────────────────────────────────────────
+        function escHtml(str) {
+            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function fmtDate(dt) {
+            if (!dt) return '-';
+            return String(dt).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3').substring(0, 10);
+        }
+
+        function calcRemain(edDt) {
+            if (!edDt) return '';
+            const dateStr = String(edDt).replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3').substring(0, 10);
+            const diff = new Date(dateStr) - new Date();
+            const days = Math.floor(diff / 86400000);
+            if (days < 0) return `<div class="period-remain">마감</div>`;
+            if (days === 0) return `<div class="period-remain" style="color:#cc0000;">오늘 마감!</div>`;
+            if (days <= 3) return `<div class="period-remain" style="color:#cc0000;">D - ${days}</div>`;
+            if (days <= 7) return `<div class="period-remain" style="color:#e07000;">D - ${days}</div>`;
+            return `<div class="period-remain" style="color:#888;">D - ${days}</div>`;
+        }
+
+        // ─────────────────────────────────────────────
+        // Enter key 검색 (기본 필터)
+        // ─────────────────────────────────────────────
+        document.getElementById('filterAddr').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') applyFilters();
+        });
+
+        // ─────────────────────────────────────────────
+        // JUSO API 처리 (사용자 제공 XML 코드 반영)
+        // ─────────────────────────────────────────────
+        function openJusoModal() {
+            document.getElementById('jusoModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('jusoKeyword').focus(), 100);
+        }
+
+        function closeJusoModal() {
+            document.getElementById('jusoModal').style.display = 'none';
+        }
+
+        function checkSearchedWord(obj) {
+            if (obj.value.length > 0) {
+                // 특수문자 제거
+                var expText = /[%=><]/;
+                if (expText.test(obj.value) == true) {
+                    alert("특수문자를 입력 할수 없습니다.");
+                    obj.value = obj.value.split(expText).join("");
+                    return false;
+                }
+
+                // 특정문자열(sql예약어의 앞뒤공백포함) 제거
+                var sqlArray = new Array("OR", "SELECT", "INSERT", "DELETE", "UPDATE", "CREATE", "DROP", "EXEC", "UNION", "FETCH", "DECLARE", "TRUNCATE");
+                for (var i = 0; i < sqlArray.length; i++) {
+                    var regex = new RegExp(sqlArray[i], "gi");
+                    if (regex.test(obj.value)) {
+                        alert(sqlArray[i] + "와(과) 같은 특정문자로 검색할 수 없습니다.");
+                        obj.value = obj.value.replace(regex, "");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function jusoEnterSearch(e) {
+            if (e.keyCode == 13 || e.key == 'Enter') {
+                e.preventDefault();
+                getAddr();
+            }
+        }
+
+        function getAddr() {
+            if (!checkSearchedWord(document.jusoForm.keyword)) {
+                return;
+            }
+
+            $("#jusoList").html('<div style="padding:40px; text-align:center;">검색 중...</div>');
+
+            $.ajax({
+                url: "https://business.juso.go.kr/addrlink/addrLinkApiJsonp.do"  // 인터넷망
+                , type: "post"
+                , data: $("#jusoForm").serialize()
+                , dataType: "jsonp"
+                , crossDomain: true
+                , success: function (xmlStr) {
+                    var xmlData;
+                    if (navigator.appName.indexOf("Microsoft") > -1) {
+                        xmlData = new ActiveXObject("Microsoft.XMLDOM");
+                        xmlData.loadXML(xmlStr.returnXml)
+                    } else {
+                        xmlData = xmlStr.returnXml;
+                    }
+                    $("#jusoList").html("");
+                    var errCode = $(xmlData).find("errorCode").text();
+                    var errDesc = $(xmlData).find("errorMessage").text();
+                    if (errCode != "0") {
+                        alert("API 에러 [" + errCode + "]: " + errDesc);
+                    } else {
+                        makeList(xmlData);
+                    }
+                }
+                , error: function (xhr, status, error) {
+                    alert("주소 검색 중 에러가 발생했습니다.");
+                    $("#jusoList").html("");
+                }
+            });
+        }
+
+        function makeList(xmlData) {
+            var items = $(xmlData).find("juso");
+            if (items.length === 0) {
+                $("#jusoList").html('<div style="padding:40px; text-align:center;">검색 결과가 없습니다.</div>');
+                return;
+            }
+
+            var htmlStr = '<table style="width:100%; border-collapse:collapse; text-align:left; font-size:13px;">';
+            htmlStr += '<tr style="background:#f0f5f2; border-bottom:1px solid #ccc;">';
+            htmlStr += '<th style="padding:8px 12px;">선택</th>';
+            htmlStr += '<th style="padding:8px 12px; width:45%;">온비드 매칭(전체 지번주소) 추출</th>';
+            htmlStr += '<th style="padding:8px 12px; width:45%;">도로명주소 (참고용)</th>';
+            htmlStr += '<th style="padding:8px 12px;">우편번호</th>';
+            htmlStr += '</tr>';
+
+            items.each(function () {
+                var roadAddr = $(this).find('roadAddr').text();
+                var jibunAddr = $(this).find('jibunAddr').text();  // 온비드와 매칭될 전체 지번주소 추출!
+                var zipNo = $(this).find('zipNo').text();
+
+                // 클릭하면 자동입력되도록 이스케이프
+                var safeJibun = jibunAddr.replace(/'/g, "\\'");
+
+                htmlStr += '<tr style="border-bottom:1px solid #eee; transition:background 0.2s; cursor:pointer;" onmouseover="this.style.background=\'#fdf9f3\'" onmouseout="this.style.background=\'none\'" onclick="selectJibun(\'' + safeJibun + '\')">';
+                htmlStr += '<td style="padding:10px 12px; text-align:center;"><button style="background:#2d8a4e; color:#fff; border:none; padding:4px 8px; border-radius:3px; cursor:pointer;" onclick="event.stopPropagation(); selectJibun(\'' + safeJibun + '\')">선택</button></td>';
+                htmlStr += '<td style="padding:10px 12px; color:#1a5c2e; font-weight:700;">' + jibunAddr + '</td>';
+                htmlStr += '<td style="padding:10px 12px; color:#666;">' + roadAddr + '</td>';
+                htmlStr += '<td style="padding:10px 12px; text-align:center;">' + zipNo + '</td>';
+                htmlStr += '</tr>';
+            });
+            htmlStr += '</table>';
+            $("#jusoList").html(htmlStr);
+        }
+
+        // 지번을 선택하면 필터창에 들어감
+        function selectJibun(jibun) {
+            document.getElementById('filterAddr').value = jibun; // 웹사이트에 기입되는 주소창
+            closeJusoModal();
+            applyFilters(); // 선택 직후 바로 온비드 데이터와 주소코드 자동 매칭 검색!
+        }
+
+        // ─────────────────────────────────────────────
+        // 페이지 로드 시 실행
+        // ─────────────────────────────────────────────
+        window.addEventListener('load', init);
+    </script>
+
+</body>
+
+</html>
