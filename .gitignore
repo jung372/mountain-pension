@@ -1,4 +1,4 @@
 .env
 fetch_log.txt
 __pycache__/
-*.xlsx
+
