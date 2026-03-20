@@ -18,7 +18,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='repla
 import requests
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import time
 import pandas as pd
 import re
@@ -101,7 +101,8 @@ def is_forest(item):
 # 4. 로그 함수
 # ─────────────────────────────────────────────
 def log(msg):
-    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    KST = timezone(timedelta(hours=9))
+    now = datetime.now(KST).strftime('%Y-%m-%d %H:%M:%S')
     line = f"[{now}] {msg}"
     print(line)
     try:
@@ -393,7 +394,8 @@ def fetch_all():
 # 9. JS 파일로 저장
 # ─────────────────────────────────────────────
 def save_as_js(items):
-    now_str = datetime.now().strftime('%Y-%m-%d %H:%M')
+    KST = timezone(timedelta(hours=9))
+    now_str = datetime.now(KST).strftime('%Y-%m-%d %H:%M (KST)')
     payload = {
         'updatedAt' : now_str,
         'totalCount': len(items),
