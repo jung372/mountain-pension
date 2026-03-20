@@ -1196,7 +1196,7 @@
                 데이터 로딩 중... <span id="statusCount"></span>
             </div>
             <span class="data-update-time" id="updateTime"></span>
-            <button class="btn-refresh" id="btnRefresh" onclick="reloadData()" disabled>
+            <button class="btn-refresh" id="btnRefresh" onclick="reloadData()" disabled title="">
                 <span class="btn-spinner" id="refreshSpinner"></span>
                 <span class="btn-label" id="refreshLabel">🔃 새로고침</span>
             </button>
@@ -1344,6 +1344,41 @@
 
     </div><!-- /main-wrap -->
 
+    <!-- ===== PAT 입력 모달 ===== -->
+    <div id="patModal"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:#fff; width:90%; max-width:520px; border-radius:10px; padding:28px 28px 24px; box-shadow:0 10px 40px rgba(0,0,0,0.25);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+                <h3 style="color:#1a5c2e; font-size:18px; margin:0;">🔑 GitHub 인증 설정</h3>
+                <button onclick="closePATModal()" style="border:none; background:none; font-size:20px; cursor:pointer; color:#666;">✖</button>
+            </div>
+            <p style="font-size:13px; color:#555; line-height:1.7; margin-bottom:16px;">
+                데이터를 갱신하려면 <strong>GitHub Personal Access Token (PAT)</strong>이 필요합니다.<br>
+                PAT는 이 브라우저에만 저장되며 외부로 전송되지 않습니다.
+            </p>
+            <div style="background:#f0f8f4; border:1px solid #b5ddc4; border-radius:6px; padding:12px 14px; font-size:12px; color:#2d5a3d; line-height:1.8; margin-bottom:16px;">
+                <strong>📌 PAT 발급 방법</strong><br>
+                1. <a href="https://github.com/settings/tokens" target="_blank" style="color:#1a5c2e;">github.com/settings/tokens</a> 접속<br>
+                2. <strong>Generate new token (classic)</strong> 클릭<br>
+                3. <strong>workflow</strong> 권한 체크 후 생성<br>
+                4. 생성된 토큰을 아래에 붙여넣기
+            </div>
+            <input type="password" id="patInput"
+                placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                style="width:100%; padding:10px 12px; font-size:14px; border:1px solid #ccc; border-radius:6px; margin-bottom:12px; font-family:monospace;"
+                onkeydown="if(event.key==='Enter') confirmPAT();" />
+            <div style="display:flex; gap:8px; justify-content:flex-end;">
+                <button onclick="closePATModal()"
+                    style="padding:9px 20px; background:#fff; border:1px solid #bbb; border-radius:5px; font-size:13px; cursor:pointer; color:#555;">취소</button>
+                <button onclick="confirmPAT()"
+                    style="padding:9px 24px; background:#1a5c2e; color:#fff; border:none; border-radius:5px; font-size:13px; font-weight:700; cursor:pointer;">✅ 저장 후 실행</button>
+            </div>
+            <p style="font-size:11px; color:#aaa; margin-top:12px; text-align:center;">
+                ⚠ PAT는 localStorage에만 저장됩니다. 공용 PC에서는 사용 후 브라우저 데이터를 삭제하세요.
+            </p>
+        </div>
+    </div>
+
     <!-- ===== JUSO API MODAL ===== -->
     <div id="jusoModal"
         style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
@@ -1405,6 +1440,28 @@
         // ─────────────────────────────────────────────
         // 초기화
         // ─────────────────────────────────────────────
+        // ─────────────────────────────────────────────
+        // GitHub 설정 (리포지토리 정보)
+        // ─────────────────────────────────────────────
+        const GH_OWNER = 'jung372';
+        const GH_REPO  = 'mountain-pension';
+        const GH_WORKFLOW_FILE = 'update_data.yml';
+
+        function getTodayStr() {
+            // KST 기준 오늘 날짜 'YYYY-MM-DD'
+            const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function isUpdatedToday(updatedAt) {
+            if (!updatedAt) return false;
+            // updatedAt 형식: 'YYYY-MM-DD HH:MM'
+            return updatedAt.startsWith(getTodayStr());
+        }
+
         function init() {
             // 초기 로딩 중: 상태 아이콘 숨기고 스피너 표시
             document.getElementById('statusIcon').style.display = 'none';
@@ -1425,7 +1482,17 @@
                     document.getElementById('statusText').innerHTML =
                         `온비드 공매 데이터 로드 완료 &nbsp;|&nbsp; <strong>${allItems.length}건</strong> (유찰 2회 이상 임야)`;
                     document.getElementById('updateTime').textContent = `최종 갱신: ${ONBID_DATA.updatedAt || '알 수 없음'}`;
-                    document.getElementById('btnRefresh').disabled = false;
+
+                    // ── 오늘 이미 갱신된 경우 버튼 비활성화 ──
+                    const btn = document.getElementById('btnRefresh');
+                    if (isUpdatedToday(ONBID_DATA.updatedAt)) {
+                        btn.disabled = true;
+                        btn.title = '오늘(' + getTodayStr() + ') 이미 갱신되었습니다. 내일 다시 시도하세요.';
+                        document.getElementById('refreshLabel').textContent = '✅ 오늘 갱신 완료';
+                    } else {
+                        btn.disabled = false;
+                        btn.title = '최신 데이터를 GitHub Actions를 통해 가져옵니다.';
+                    }
                 } else {
                     handleDataError();
                 }
@@ -1447,40 +1514,180 @@
             document.getElementById('statusBar').style.borderLeftColor = '#e05a5a';
             document.getElementById('statusIcon').textContent = '⚠️';
             document.getElementById('statusText').innerHTML =
-                '<strong style="color:#c0392b;">데이터 파일(onbid_data.js)을 찾을 수 없습니다.</strong> &nbsp;→ fetch_onbid.py를 먼저 실행하세요.';
-            document.getElementById('btnRefresh').disabled = false;
+                '<strong style="color:#c0392b;">데이터 파일(onbid_data.js)을 찾을 수 없습니다.</strong> &nbsp;→ 새로고침 버튼으로 데이터를 가져오세요.';
+            const btn = document.getElementById('btnRefresh');
+            btn.disabled = false;
+            btn.title = '최신 데이터를 GitHub Actions를 통해 가져옵니다.';
 
             document.getElementById('resultBody').innerHTML = `
             <tr><td colspan="10">
                 <div class="state-box">
                     <div class="state-icon">📂</div>
                     <p><strong>데이터 파일이 없습니다.</strong><br>
-                    <code>fetch_onbid.py</code>를 실행하면 <code>onbid_data.js</code>가 생성됩니다.</p>
-                    <p class="state-hint">명령 프롬프트에서: python fetch_onbid.py<br>또는 run_fetch.bat 실행</p>
+                    오른쪽 상단의 <strong>🔃 새로고침</strong> 버튼을 눌러 데이터를 가져오세요.</p>
                 </div>
             </td></tr>`;
             document.getElementById('resultCount').textContent = '0';
         }
 
+        // ─────────────────────────────────────────────
+        // GitHub PAT 관리
+        // ─────────────────────────────────────────────
+        function getStoredPAT() {
+            return localStorage.getItem('gh_pat_mountain') || '';
+        }
+        function storePAT(pat) {
+            localStorage.setItem('gh_pat_mountain', pat);
+        }
+        function clearPAT() {
+            localStorage.removeItem('gh_pat_mountain');
+        }
+
+        // ─────────────────────────────────────────────
+        // 새로고침 (GitHub Actions 트리거)
+        // ─────────────────────────────────────────────
         function reloadData() {
+            const pat = getStoredPAT();
+            if (!pat) {
+                openPATModal();
+                return;
+            }
+            triggerWorkflow(pat);
+        }
+
+        async function triggerWorkflow(pat) {
             const btn = document.getElementById('btnRefresh');
-            const spinner = document.getElementById('refreshSpinner');
             const label = document.getElementById('refreshLabel');
 
-            // 버튼에 스피너 표시 + 비활성화
             btn.disabled = true;
             btn.classList.add('loading');
-            spinner.style.display = 'inline-block';
-            label.textContent = '데이터 갱신 중...';
-
-            // 상태바도 갱신 중 표시
+            label.textContent = '워크플로우 실행 중...';
             document.getElementById('statusIcon').style.display = 'none';
             document.getElementById('statusSpinner').classList.add('active');
             document.getElementById('statusText').innerHTML =
-                '<span style="color:#2d6a42;">온비드 API에서 최신 데이터를 불러오는 중입니다...</span>';
+                '<span style="color:#2d6a42;">GitHub Actions에서 온비드 데이터를 수집하는 중입니다... (약 2~5분 소요)</span>';
 
-            // 짧은 딜레이 후 실제 새로고침 (스피너가 보이는 시간 확보)
-            setTimeout(() => { location.reload(); }, 600);
+            try {
+                const resp = await fetch(
+                    `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/workflows/${GH_WORKFLOW_FILE}/dispatches`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${pat}`,
+                            'Accept': 'application/vnd.github+json',
+                            'Content-Type': 'application/json',
+                            'X-GitHub-Api-Version': '2022-11-28'
+                        },
+                        body: JSON.stringify({ ref: 'main' })
+                    }
+                );
+
+                if (resp.status === 204) {
+                    // 성공 → 워크플로우 완료 대기 후 페이지 갱신
+                    document.getElementById('statusText').innerHTML =
+                        '⏳ <strong>워크플로우가 시작되었습니다!</strong> 데이터 수집 완료 후 자동으로 페이지가 새로고침됩니다. (약 2~5분)';
+                    label.textContent = '⏳ 수집 중...';
+                    pollWorkflowCompletion(pat);
+                } else if (resp.status === 401) {
+                    clearPAT();
+                    alert('GitHub 인증 실패\n\nPAT(Personal Access Token)이 만료되었거나 잘못되었습니다.\n다시 입력해 주세요.');
+                    resetRefreshBtn();
+                    openPATModal();
+                } else {
+                    const errBody = await resp.text();
+                    alert(`워크플로우 실행 실패 (HTTP ${resp.status})\n\n${errBody}`);
+                    resetRefreshBtn();
+                }
+            } catch (err) {
+                alert(`네트워크 오류:\n${err.message}`);
+                resetRefreshBtn();
+            }
+        }
+
+        async function pollWorkflowCompletion(pat) {
+            // 최대 10분간 15초 간격으로 폴링
+            const maxAttempts = 40;
+            let attempts = 0;
+            // 워크플로우가 API에 등록될 시간 확보 (10초 대기)
+            await new Promise(r => setTimeout(r, 10000));
+
+            const poll = async () => {
+                attempts++;
+                try {
+                    const resp = await fetch(
+                        `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/runs?per_page=5&event=workflow_dispatch`,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${pat}`,
+                                'Accept': 'application/vnd.github+json',
+                                'X-GitHub-Api-Version': '2022-11-28'
+                            }
+                        }
+                    );
+                    const data = await resp.json();
+                    const runs = data.workflow_runs || [];
+                    const latest = runs.find(r => r.name === 'Update Onbid Data') || runs[0];
+
+                    if (latest) {
+                        const elapsed = Math.round(attempts * 15 / 60);
+                        document.getElementById('statusText').innerHTML =
+                            `⏳ 데이터 수집 중... (상태: <strong>${latest.status}</strong> / 경과 약 ${elapsed}분) — 완료 시 자동 새로고침됩니다.`;
+
+                        if (latest.conclusion === 'success') {
+                            document.getElementById('statusText').innerHTML =
+                                '✅ <strong>데이터 수집 완료!</strong> 페이지를 새로고침합니다...';
+                            setTimeout(() => location.reload(), 3000);
+                            return;
+                        } else if (latest.conclusion === 'failure' || latest.conclusion === 'cancelled') {
+                            document.getElementById('statusSpinner').classList.remove('active');
+                            document.getElementById('statusIcon').style.display = '';
+                            document.getElementById('statusText').innerHTML =
+                                `⚠️ 워크플로우가 <strong>${latest.conclusion}</strong> 상태로 종료되었습니다. GitHub Actions 로그를 확인해 주세요.`;
+                            resetRefreshBtn();
+                            return;
+                        }
+                    }
+
+                    if (attempts < maxAttempts) {
+                        setTimeout(poll, 15000);
+                    } else {
+                        document.getElementById('statusText').innerHTML =
+                            '⚠️ 완료 확인 시간이 초과되었습니다. <a href="https://github.com/jung372/mountain-pension/actions" target="_blank">Actions 탭</a>에서 직접 확인해 주세요.';
+                        resetRefreshBtn();
+                    }
+                } catch (e) {
+                    if (attempts < maxAttempts) setTimeout(poll, 15000);
+                }
+            };
+            poll();
+        }
+
+        function resetRefreshBtn() {
+            const btn = document.getElementById('btnRefresh');
+            btn.classList.remove('loading');
+            btn.disabled = false;
+            document.getElementById('refreshLabel').textContent = '🔃 새로고침';
+            document.getElementById('statusSpinner').classList.remove('active');
+            document.getElementById('statusIcon').style.display = '';
+        }
+
+        // ─────────────────────────────────────────────
+        // PAT 입력 모달
+        // ─────────────────────────────────────────────
+        function openPATModal() {
+            document.getElementById('patModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('patInput').focus(), 100);
+        }
+        function closePATModal() {
+            document.getElementById('patModal').style.display = 'none';
+            document.getElementById('patInput').value = '';
+        }
+        function confirmPAT() {
+            const val = document.getElementById('patInput').value.trim();
+            if (!val) { alert('PAT를 입력해 주세요.'); return; }
+            storePAT(val);
+            closePATModal();
+            triggerWorkflow(val);
         }
 
         // ─────────────────────────────────────────────
