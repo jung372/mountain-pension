@@ -214,6 +214,9 @@
             font-size: 12px;
             cursor: pointer;
             transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .btn-refresh:hover {
@@ -223,6 +226,73 @@
         .btn-refresh:disabled {
             background: #aaa;
             cursor: not-allowed;
+        }
+
+        /* ===== INLINE SPINNER (버튼용 소형) ===== */
+        .btn-spinner {
+            display: none;
+            width: 13px;
+            height: 13px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+
+        .btn-refresh.loading .btn-spinner {
+            display: inline-block;
+        }
+
+        .btn-refresh.loading .btn-label {
+            letter-spacing: 0.01em;
+        }
+
+        /* ===== STATUS BAR INLINE SPINNER ===== */
+        .status-spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2.5px solid #b5ddc4;
+            border-top-color: #2d8a4e;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+
+        .status-spinner.active {
+            display: inline-block;
+        }
+
+        /* ===== SEARCH LOADING OVERLAY ===== */
+        .search-loading-bar {
+            display: none;
+            position: relative;
+            height: 3px;
+            background: #e0efe4;
+            border-radius: 2px;
+            margin-bottom: 6px;
+            overflow: hidden;
+        }
+
+        .search-loading-bar.active {
+            display: block;
+        }
+
+        .search-loading-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -40%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #2d8a4e, transparent);
+            animation: loading-slide 1s ease-in-out infinite;
+        }
+
+        @keyframes loading-slide {
+            0%   { left: -40%; }
+            100% { left: 100%; }
         }
 
         /* ===== FILTER BAR ===== */
@@ -1115,13 +1185,21 @@
     <div class="main-wrap">
 
         <!-- Data Status Bar -->
+        <!-- 검색 진행 표시 바 (필터 검색 중 활성화) -->
+        <div class="search-loading-bar" id="searchLoadingBar"></div>
+
         <div class="data-status-bar" id="statusBar">
-            <span class="status-icon">🔄</span>
-            <div class="data-status-text">
+            <span class="status-icon" id="statusIcon">🔄</span>
+            <!-- 상태바 인라인 스피너 (초기 로드 중) -->
+            <span class="status-spinner" id="statusSpinner"></span>
+            <div class="data-status-text" id="statusText">
                 데이터 로딩 중... <span id="statusCount"></span>
             </div>
             <span class="data-update-time" id="updateTime"></span>
-            <button class="btn-refresh" id="btnRefresh" onclick="reloadData()" disabled>🔃 새로고침</button>
+            <button class="btn-refresh" id="btnRefresh" onclick="reloadData()" disabled>
+                <span class="btn-spinner" id="refreshSpinner"></span>
+                <span class="btn-label" id="refreshLabel">🔃 새로고침</span>
+            </button>
         </div>
 
         <!-- Page Title -->
@@ -1328,15 +1406,23 @@
         // 초기화
         // ─────────────────────────────────────────────
         function init() {
+            // 초기 로딩 중: 상태 아이콘 숨기고 스피너 표시
+            document.getElementById('statusIcon').style.display = 'none';
+            document.getElementById('statusSpinner').classList.add('active');
+
             try {
                 if (typeof ONBID_DATA !== 'undefined' && ONBID_DATA && Array.isArray(ONBID_DATA.items)) {
                     allItems = ONBID_DATA.items;
                     filteredItems = [...allItems];
 
+                    // 스피너 → 완료 아이콘 복원
+                    document.getElementById('statusSpinner').classList.remove('active');
+                    document.getElementById('statusIcon').style.display = '';
+
                     // 상태바 갱신
                     document.getElementById('statusBar').style.borderLeftColor = '#2d8a4e';
-                    document.getElementById('statusBar').querySelector('.status-icon').textContent = '✅';
-                    document.getElementById('statusBar').querySelector('.data-status-text').innerHTML =
+                    document.getElementById('statusIcon').textContent = '✅';
+                    document.getElementById('statusText').innerHTML =
                         `온비드 공매 데이터 로드 완료 &nbsp;|&nbsp; <strong>${allItems.length}건</strong> (유찰 2회 이상 임야)`;
                     document.getElementById('updateTime').textContent = `최종 갱신: ${ONBID_DATA.updatedAt || '알 수 없음'}`;
                     document.getElementById('btnRefresh').disabled = false;
@@ -1353,9 +1439,14 @@
         function handleDataError() {
             allItems = [];
             filteredItems = [];
+
+            // 스피너 → 오류 아이콘
+            document.getElementById('statusSpinner').classList.remove('active');
+            document.getElementById('statusIcon').style.display = '';
+
             document.getElementById('statusBar').style.borderLeftColor = '#e05a5a';
-            document.getElementById('statusBar').querySelector('.status-icon').textContent = '⚠️';
-            document.getElementById('statusBar').querySelector('.data-status-text').innerHTML =
+            document.getElementById('statusIcon').textContent = '⚠️';
+            document.getElementById('statusText').innerHTML =
                 '<strong style="color:#c0392b;">데이터 파일(onbid_data.js)을 찾을 수 없습니다.</strong> &nbsp;→ fetch_onbid.py를 먼저 실행하세요.';
             document.getElementById('btnRefresh').disabled = false;
 
@@ -1372,48 +1463,73 @@
         }
 
         function reloadData() {
-            location.reload();
+            const btn = document.getElementById('btnRefresh');
+            const spinner = document.getElementById('refreshSpinner');
+            const label = document.getElementById('refreshLabel');
+
+            // 버튼에 스피너 표시 + 비활성화
+            btn.disabled = true;
+            btn.classList.add('loading');
+            spinner.style.display = 'inline-block';
+            label.textContent = '데이터 갱신 중...';
+
+            // 상태바도 갱신 중 표시
+            document.getElementById('statusIcon').style.display = 'none';
+            document.getElementById('statusSpinner').classList.add('active');
+            document.getElementById('statusText').innerHTML =
+                '<span style="color:#2d6a42;">온비드 API에서 최신 데이터를 불러오는 중입니다...</span>';
+
+            // 짧은 딜레이 후 실제 새로고침 (스피너가 보이는 시간 확보)
+            setTimeout(() => { location.reload(); }, 600);
         }
 
         // ─────────────────────────────────────────────
         // 필터링
         // ─────────────────────────────────────────────
         function applyFilters() {
-            const sido = document.getElementById('filterSido').value.trim();
-            const sigungu = document.getElementById('filterSigungu').value.trim();
-            const alcYn = document.getElementById('filterAlcYn').value;
-            const usbdMin = parseInt(document.getElementById('filterUsbdMin').value) || 2;
-            const addrKw = document.getElementById('filterAddr').value.trim();
-            const checkedGrades = Array.from(document.querySelectorAll('input[name="fGrade"]:checked')).map(cb => cb.value);
+            // ── 검색 중 인디케이터 표시 ──
+            const loadingBar = document.getElementById('searchLoadingBar');
+            loadingBar.classList.add('active');
 
-            filteredItems = allItems.filter(item => {
-                const addr = item.addr || '';
-                const itemSido = item.sido || '';
-                const itemSigungu = item.sigungu || ''; // If not in data, we can parse from addr
-                const itemAlcYn = item.alcYn || 'N';
-                const itemGrade = item.grade || '';
+            // 비동기로 실행해서 스피너 렌더 후 필터 수행
+            setTimeout(() => {
+                const sido = document.getElementById('filterSido').value.trim();
+                const sigungu = document.getElementById('filterSigungu').value.trim();
+                const alcYn = document.getElementById('filterAlcYn').value;
+                const usbdMin = parseInt(document.getElementById('filterUsbdMin').value) || 2;
+                const addrKw = document.getElementById('filterAddr').value.trim();
+                const checkedGrades = Array.from(document.querySelectorAll('input[name="fGrade"]:checked')).map(cb => cb.value);
 
-                if (sido && !itemSido.includes(sido)) return false;
+                filteredItems = allItems.filter(item => {
+                    const addr = item.addr || '';
+                    const itemSido = item.sido || '';
+                    const itemSigungu = item.sigungu || '';
+                    const itemAlcYn = item.alcYn || 'N';
+                    const itemGrade = item.grade || '';
 
-                // If sigungu filter is active, check against itemSigungu. 
-                // Fallback: if sigungu is not in JSON, extract first 2 words from addr
-                if (sigungu) {
-                    if (itemSigungu) {
-                        if (itemSigungu !== sigungu) return false;
-                    } else {
-                        if (!addr.includes(sigungu)) return false;
+                    if (sido && !itemSido.includes(sido)) return false;
+
+                    if (sigungu) {
+                        if (itemSigungu) {
+                            if (itemSigungu !== sigungu) return false;
+                        } else {
+                            if (!addr.includes(sigungu)) return false;
+                        }
                     }
-                }
 
-                if (alcYn && itemAlcYn !== alcYn) return false;
-                if ((item.usbdCnt || 0) < usbdMin) return false;
-                if (addrKw && !addr.includes(addrKw)) return false;
-                if (checkedGrades.length > 0 && !checkedGrades.includes(itemGrade)) return false;
-                return true;
-            });
+                    if (alcYn && itemAlcYn !== alcYn) return false;
+                    if ((item.usbdCnt || 0) < usbdMin) return false;
+                    if (addrKw && !addr.includes(addrKw)) return false;
+                    if (checkedGrades.length > 0 && !checkedGrades.includes(itemGrade)) return false;
+                    return true;
+                });
 
-            currentPage = 1;
-            sortAndRender();
+                currentPage = 1;
+                sortAndRender();
+
+                // ── 검색 완료: 인디케이터 숨김 ──
+                loadingBar.classList.remove('active');
+            }, 30);
         }
 
         function updateSigunguList() {
