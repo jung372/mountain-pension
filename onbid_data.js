@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-03-25 06:06 (KST)
+// 생성일시: 2026-03-26 06:02 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-03-25 06:06 (KST)",
-  "totalCount": 223,
+  "updatedAt": "2026-03-26 06:02 (KST)",
+  "totalCount": 222,
   "items": [
     {
       "cltrNo": "2021-07314-001",
@@ -5126,34 +5126,6 @@ var ONBID_DATA = {
       "pvctTrgtYn": "Y",
       "alcYn": "N",
       "pnu": "4827025022201880004",
-      "grade": "C"
-    },
-    {
-      "cltrNo": "2025-0300-013105",
-      "cltrNm": "경상남도 사천시 용현면 송지리 10 외 37필지 임야",
-      "addr": "경상남도 사천시 용현면 송지리 10 외 37필지 임야",
-      "sido": "경상남도",
-      "sigungu": "사천시",
-      "useNm": "임야",
-      "area": "99431.0",
-      "apprAmt": "비공개",
-      "minBidAmt": "210.0억원",
-      "apprAmtRaw": 0.0,
-      "minBidAmtRaw": 21000000000.0,
-      "usbdCnt": 11,
-      "bidBgDt": "202503241000",
-      "bidEdDt": "202503241300",
-      "pbctNo": "5221570",
-      "pbctNsq": "11",
-      "prptDivNm": "기타일반재산",
-      "orgNm": "주식회사 무궁화신탁",
-      "thumbUrl": "https://op.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=15858123&atchSn=1&hashCrpsNo=CLCPFDNCJDNNEOPEKHHAPMBLNIFMMEPPEEOOMKIAOABINJLDHEDEPPMGNMLPLKCC&downloadImageKind=THNL_NM",
-      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2025-0300-013105&pbctCdtnNo=5221570",
-      "apslPrcRto": null,
-      "batcBidYn": "N",
-      "pvctTrgtYn": "Y",
-      "alcYn": "N",
-      "pnu": "4824033021100100000",
       "grade": "C"
     },
     {
