@@ -163,23 +163,39 @@ def get_pnu_lookup():
         return {}
 
 def get_grade_lookup():
-    excel_path = os.path.join(SCRIPT_DIR, '강원 산지 등급_260309(필드 삭제).xlsx')
-    if not os.path.exists(excel_path):
-        log(f"! 등급 참조 파일 없음: {excel_path}")
-        return {}
-    try:
-        df = pd.read_excel(excel_path)
-        lookup = {}
-        for _, row in df.iterrows():
-            pnu = str(row['PNU_CD(New)']).strip()
-            grade = str(row['등급']).strip()
-            if pnu and grade:
-                lookup[pnu] = grade
-        log(f"등급 참조 데이터 {len(lookup)}건 로드 완료")
-        return lookup
-    except Exception as e:
-        log(f"! 등급 참조 파일 로드 오류: {e}")
-        return {}
+    """강원 + 경북 산지 등급 참조 데이터 통합 로드"""
+    lookup = {}
+
+    # 로드할 파일 목록 (순서 중요: 나중 파일이 동일 PNU 덮어씀)
+    grade_files = [
+        '강원 산지 등급_260309(필드 삭제).xlsx',
+        '경북 산지 등급_260327.xlsx',
+    ]
+
+    for fname in grade_files:
+        fpath = os.path.join(SCRIPT_DIR, fname)
+        if not os.path.exists(fpath):
+            log(f"! 등급 참조 파일 없음 (건너뜀): {fname}")
+            continue
+        try:
+            df = pd.read_excel(fpath)
+            # PNU 컬럼은 'PNU_CD(New)', 등급 컬럼은 두 번째 컬럼(인덱스 1)
+            pnu_col  = df.columns[0]
+            grade_col = df.columns[1]
+            before = len(lookup)
+            for _, row in df.iterrows():
+                pnu   = str(row[pnu_col]).strip()
+                grade = str(row[grade_col]).strip()
+                if pnu and grade and pnu != 'nan' and grade != 'nan':
+                    lookup[pnu] = grade
+            added = len(lookup) - before
+            log(f"등급 참조 로드: {fname} → {added:,}건 추가 (누계 {len(lookup):,}건)")
+        except Exception as e:
+            log(f"! 등급 참조 파일 로드 오류 ({fname}): {e}")
+
+    if not lookup:
+        log("! 등급 참조 데이터 없음 - 모든 항목 C 등급으로 처리됩니다")
+    return lookup
 
 
 def parse_lot_number(lot_str):
