@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-03-27 05:11 (KST)
+// 생성일시: 2026-03-28 05:09 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-03-27 05:11 (KST)",
-  "totalCount": 201,
+  "updatedAt": "2026-03-28 05:09 (KST)",
+  "totalCount": 199,
   "items": [
     {
       "cltrNo": "2021-07314-001",
@@ -1570,7 +1570,7 @@ var ONBID_DATA = {
       "pvctTrgtYn": "N",
       "alcYn": "N",
       "pnu": "4782036039200580000",
-      "grade": "C"
+      "grade": "B"
     },
     {
       "cltrNo": "2025-02046-001",
@@ -1598,7 +1598,7 @@ var ONBID_DATA = {
       "pvctTrgtYn": "N",
       "alcYn": "Y",
       "pnu": "4719012900200350001",
-      "grade": "C"
+      "grade": "B"
     },
     {
       "cltrNo": "2025-10656-001",
@@ -1626,7 +1626,7 @@ var ONBID_DATA = {
       "pvctTrgtYn": "N",
       "alcYn": "Y",
       "pnu": "4782037057200770002",
-      "grade": "C"
+      "grade": "B"
     },
     {
       "cltrNo": "2025-10857-001",
@@ -1654,7 +1654,7 @@ var ONBID_DATA = {
       "pvctTrgtYn": "N",
       "alcYn": "N",
       "pnu": "4777037036200130007",
-      "grade": "C"
+      "grade": "B"
     },
     {
       "cltrNo": "2025-12616-001",
@@ -4177,34 +4177,6 @@ var ONBID_DATA = {
       "grade": "C"
     },
     {
-      "cltrNo": "2025-0300-015515",
-      "cltrNm": "경기도 평택시 독곡동 산 18 임야",
-      "addr": "경기도 평택시 독곡동 산 18 임야",
-      "sido": "경기도",
-      "sigungu": "평택시",
-      "useNm": "임야",
-      "area": "3323.0",
-      "apprAmt": "11.4억원",
-      "minBidAmt": "15.8억원",
-      "apprAmtRaw": 1143471000.0,
-      "minBidAmtRaw": 1582000000.0,
-      "usbdCnt": 6,
-      "bidBgDt": "202503261300",
-      "bidEdDt": "202503261600",
-      "pbctNo": "5241300",
-      "pbctNsq": "1",
-      "prptDivNm": "기타일반재산",
-      "orgNm": "우리자산신탁 주식회사",
-      "thumbUrl": "https://op.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=15888557&atchSn=1&hashCrpsNo=NBMLNMGCFMOCGOFOHNILKDDADPFDNGJKOFLJBGGENLGFJJFFIIMGOMHJJJOKNKML&downloadImageKind=THNL_NM",
-      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2025-0300-015515&pbctCdtnNo=5241300",
-      "apslPrcRto": null,
-      "batcBidYn": "Y",
-      "pvctTrgtYn": "Y",
-      "alcYn": "N",
-      "pnu": "4122011100200000000",
-      "grade": "C"
-    },
-    {
       "cltrNo": "2025-1200-091286",
       "cltrNm": "경상북도 칠곡군 왜관읍 아곡리 산28-2 임야",
       "addr": "경상북도 칠곡군 왜관읍 아곡리 산28-2 임야",
@@ -4230,7 +4202,7 @@ var ONBID_DATA = {
       "pvctTrgtYn": "Y",
       "alcYn": "N",
       "pnu": "4785025029200280002",
-      "grade": "C"
+      "grade": "S"
     },
     {
       "cltrNo": "2025-0300-018332",
@@ -4370,35 +4342,7 @@ var ONBID_DATA = {
       "pvctTrgtYn": "Y",
       "alcYn": "N",
       "pnu": "4717013400202450000",
-      "grade": "C"
-    },
-    {
-      "cltrNo": "2025-0200-011803",
-      "cltrNm": "경상북도 경주시 강동면 왕신리 산257-14 임야",
-      "addr": "경상북도 경주시 강동면 왕신리 산257-14 임야",
-      "sido": "경상북도",
-      "sigungu": "경주시",
-      "useNm": "임야",
-      "area": "664.0",
-      "apprAmt": "525만원",
-      "minBidAmt": "26.0억원",
-      "apprAmtRaw": 5245600.0,
-      "minBidAmtRaw": 2600000000.0,
-      "usbdCnt": 7,
-      "bidBgDt": "202503261100",
-      "bidEdDt": "202503261600",
-      "pbctNo": "5215849",
-      "pbctNsq": "7",
-      "prptDivNm": "기타일반재산",
-      "orgNm": "수협은행",
-      "thumbUrl": "https://op.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=15833200&atchSn=1&hashCrpsNo=CCDPDFNMNJAGDBIAAEPAOHPLPNKIBPLBFMIBLEJCGGPDNMJDBBOPLIHMJNEKHJOH&downloadImageKind=THNL_NM",
-      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2025-0200-011803&pbctCdtnNo=5215849",
-      "apslPrcRto": null,
-      "batcBidYn": "Y",
-      "pvctTrgtYn": "Y",
-      "alcYn": "N",
-      "pnu": "4713037028202570014",
-      "grade": "C"
+      "grade": "B"
     },
     {
       "cltrNo": "2023-0800-043608",
