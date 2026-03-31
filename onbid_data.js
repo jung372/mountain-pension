@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-03-31 06:33 (KST)
+// 생성일시: 2026-04-01 06:05 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-03-31 06:33 (KST)",
-  "totalCount": 199,
+  "updatedAt": "2026-04-01 06:05 (KST)",
+  "totalCount": 198,
   "items": [
     {
       "cltrNo": "2021-07314-001",
@@ -4146,34 +4146,6 @@ var ONBID_DATA = {
       "pvctTrgtYn": "Y",
       "alcYn": "N",
       "pnu": "4146100000100000000",
-      "grade": "C"
-    },
-    {
-      "cltrNo": "2025-0300-016031",
-      "cltrNm": "경기도 이천시 중리동 313-8 외 3필지 임야",
-      "addr": "경기도 이천시 중리동 313-8 외 3필지 임야",
-      "sido": "경기도",
-      "sigungu": "이천시",
-      "useNm": "임야",
-      "area": "5141.0",
-      "apprAmt": "85.2억원",
-      "minBidAmt": "69.7억원",
-      "apprAmtRaw": 8520372000.0,
-      "minBidAmtRaw": 6971800000.0,
-      "usbdCnt": 6,
-      "bidBgDt": "202503281400",
-      "bidEdDt": "202503281800",
-      "pbctNo": "5246622",
-      "pbctNsq": "6",
-      "prptDivNm": "기타일반재산",
-      "orgNm": "코리아신탁주식회사",
-      "thumbUrl": "https://op.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=15896815&atchSn=1&hashCrpsNo=MCHGJPDIBBMOIBMGGCLHFGIAHOJHEJFIMAJNKGEILHONKOEGDPPFLABJADIGPEBP&downloadImageKind=THNL_NM",
-      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2025-0300-016031&pbctCdtnNo=5246622",
-      "apslPrcRto": null,
-      "batcBidYn": "N",
-      "pvctTrgtYn": "Y",
-      "alcYn": "N",
-      "pnu": "4150010300103130008",
       "grade": "C"
     },
     {
