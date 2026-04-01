@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-04-01 06:05 (KST)
+// 생성일시: 2026-04-02 06:32 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-04-01 06:05 (KST)",
-  "totalCount": 198,
+  "updatedAt": "2026-04-02 06:32 (KST)",
+  "totalCount": 196,
   "items": [
     {
       "cltrNo": "2021-07314-001",
@@ -3365,34 +3365,6 @@ var ONBID_DATA = {
       "grade": "C"
     },
     {
-      "cltrNo": "2025-0300-016271",
-      "cltrNm": "경기도 용인시 처인구 고림동 186-90외 48필지 임야",
-      "addr": "경기도 용인시 처인구 고림동 186-90외 48필지 임야",
-      "sido": "경기도",
-      "sigungu": "용인시 처인구",
-      "useNm": "임야",
-      "area": "64778.0",
-      "apprAmt": "387.9억원",
-      "minBidAmt": "190.0억원",
-      "apprAmtRaw": 38793429000.0,
-      "minBidAmtRaw": 19000000000.0,
-      "usbdCnt": 13,
-      "bidBgDt": "202603311000",
-      "bidEdDt": "202603311800",
-      "pbctNo": "5721086",
-      "pbctNsq": "16",
-      "prptDivNm": "기타일반재산",
-      "orgNm": "신영부동산신탁(주)",
-      "thumbUrl": "https://op.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=15899305&atchSn=3&hashCrpsNo=BLGPAMLLCDFNJJIBBCNHDBLOIACCNMMLNILOGBFEIHCNHMNFLNNPBEDHGJHINLND&downloadImageKind=THNL_NM",
-      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2025-0300-016271&pbctCdtnNo=5721086",
-      "apslPrcRto": null,
-      "batcBidYn": "N",
-      "pvctTrgtYn": "N",
-      "alcYn": "N",
-      "pnu": "4146110600101860090",
-      "grade": "C"
-    },
-    {
       "cltrNo": "2026-0100-095913",
       "cltrNm": "경기도 파주시 조리읍 장곡리 427-39 임야",
       "addr": "경기도 파주시 조리읍 장곡리 427-39 임야",
@@ -5126,34 +5098,6 @@ var ONBID_DATA = {
       "pvctTrgtYn": "Y",
       "alcYn": "N",
       "pnu": "3171026525103780002",
-      "grade": "C"
-    },
-    {
-      "cltrNo": "2024-1200-090683",
-      "cltrNm": "울산광역시 울주군 상북면 명촌리 334-1 외 9필지 임야",
-      "addr": "울산광역시 울주군 상북면 명촌리 334-1 외 9필지 임야",
-      "sido": "울산광역시",
-      "sigungu": "울주군",
-      "useNm": "임야",
-      "area": "46914.0",
-      "apprAmt": "67.6억원",
-      "minBidAmt": "35.0억원",
-      "apprAmtRaw": 6758854710.0,
-      "minBidAmtRaw": 3500060000.0,
-      "usbdCnt": 16,
-      "bidBgDt": "202503310900",
-      "bidEdDt": "202503311600",
-      "pbctNo": "5247593",
-      "pbctNsq": "8",
-      "prptDivNm": "기타일반재산",
-      "orgNm": "강남새마을금고",
-      "thumbUrl": "https://op.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=15662936&atchSn=1&hashCrpsNo=EFCNGGMBAOOABOJMBOIPMFIFJBBFHGIKPBDNCLPAHLLLDBNNJOKMLHNDIIINJBCJ&downloadImageKind=THNL_NM",
-      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2024-1200-090683&pbctCdtnNo=5247593",
-      "apslPrcRto": null,
-      "batcBidYn": "N",
-      "pvctTrgtYn": "Y",
-      "alcYn": "N",
-      "pnu": "3171038027103340001",
       "grade": "C"
     },
     {
