@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-04-07 06:12 (KST)
+// 생성일시: 2026-04-08 06:41 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-04-07 06:12 (KST)",
-  "totalCount": 314,
+  "updatedAt": "2026-04-08 06:41 (KST)",
+  "totalCount": 313,
   "items": [
     {
       "cltrNo": "2025-13543-001",
@@ -7366,34 +7366,6 @@ var ONBID_DATA = {
       "pvctTrgtYn": "Y",
       "alcYn": "N",
       "pnu": "4825036021201640041",
-      "grade": "C"
-    },
-    {
-      "cltrNo": "2025-1100-083001",
-      "cltrNm": "경상남도 사천시 정동면 예수리 367-1외 63필지 토지",
-      "addr": "경상남도 사천시 정동면 예수리 367-1외 63필지 토지",
-      "sido": "경상남도",
-      "sigungu": "사천시",
-      "useNm": "임야",
-      "area": "29278.0",
-      "apprAmt": "80.7억원",
-      "minBidAmt": "52.4억원",
-      "apprAmtRaw": 8072130000.0,
-      "minBidAmtRaw": 5243400000.0,
-      "usbdCnt": 10,
-      "bidBgDt": "202603061000",
-      "bidEdDt": "202603061600",
-      "pbctNo": "5783670",
-      "pbctNsq": "6",
-      "prptDivNm": "기타일반재산",
-      "orgNm": "우리자산신탁 주식회사",
-      "thumbUrl": "https://www.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=16634044&atchSn=1&hashCrpsNo=CECNCMLHMKEBNCODLNFMHOMNPPLLJHCPJCLJDFOPBKGNMNACKFPDLCOKBFIKPPKM&downloadImageKind=THNL_NM",
-      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2025-1100-083001&pbctCdtnNo=5783670",
-      "apslPrcRto": null,
-      "batcBidYn": "N",
-      "pvctTrgtYn": "Y",
-      "alcYn": "N",
-      "pnu": "4824031022103670001",
       "grade": "C"
     },
     {
