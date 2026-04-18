@@ -1,0 +1,40 @@
+name: 데이터 수집 (04:00 KST)
+
+on:
+  schedule:
+    - cron: '0 19 * * *'   # 04:00 KST = 19:00 UTC 전일
+  workflow_dispatch:         # 수동 실행 허용
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: 데이터 수집 실행
+        env:
+          ONBID_AUTH_KEY: ${{ secrets.ONBID_AUTH_KEY }}
+        run: python collector.py
+
+      - name: 수집 결과 GitHub Push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "chore: 데이터 수집 $(date +'%Y-%m-%d') [skip ci]"
+          git push
