@@ -32,4 +32,5 @@ jobs:
           git config --global user.email "action@github.com"
           git add onbid_data.js
           git commit -m "Auto-update onbid data" || exit 0
+          git pull --rebase origin main
           git push
