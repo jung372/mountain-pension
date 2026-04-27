@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-04-27 05:04 (KST)
+// 생성일시: 2026-04-28 05:26 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-04-27 05:04 (KST)",
-  "totalCount": 298,
+  "updatedAt": "2026-04-28 05:26 (KST)",
+  "totalCount": 299,
   "items": [
     {
       "cltrNo": "2025-13543-001",
@@ -5644,7 +5644,7 @@ var ONBID_DATA = {
       "minBidAmt": "30.3억원",
       "apprAmtRaw": 7234517000.0,
       "minBidAmtRaw": 3027000000.0,
-      "usbdCnt": 15,
+      "usbdCnt": 16,
       "bidBgDt": "202604241000",
       "bidEdDt": "202604241800",
       "pbctNo": "5858784",
@@ -5655,7 +5655,7 @@ var ONBID_DATA = {
       "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2024-0500-036138&pbctCdtnNo=5858784",
       "apslPrcRto": null,
       "batcBidYn": "Y",
-      "pvctTrgtYn": "N",
+      "pvctTrgtYn": "Y",
       "alcYn": "N",
       "pnu": "4122037028101310007",
       "grade": "C"
@@ -6946,6 +6946,34 @@ var ONBID_DATA = {
       "pvctTrgtYn": "Y",
       "alcYn": "N",
       "pnu": "4827025022201880004",
+      "grade": "C"
+    },
+    {
+      "cltrNo": "2026-0400-018976",
+      "cltrNm": "전라남도 광양시 광양읍 구산리 601 외 19필지",
+      "addr": "전라남도 광양시 광양읍 구산리 601 외 19필지",
+      "sido": "전라남도",
+      "sigungu": "광양시",
+      "useNm": "임야",
+      "area": "27683.0",
+      "apprAmt": "52.6억원",
+      "minBidAmt": "35.6억원",
+      "apprAmtRaw": 5257596000.0,
+      "minBidAmtRaw": 3556944597.0,
+      "usbdCnt": 2,
+      "bidBgDt": "202606191100",
+      "bidEdDt": "202606191400",
+      "pbctNo": "5920186",
+      "pbctNsq": "10",
+      "prptDivNm": "기타일반재산",
+      "orgNm": "신한자산신탁 주식회사",
+      "thumbUrl": "https://www.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=16985118&atchSn=1&hashCrpsNo=LFEDHMEAIMPBEHHBAPJOLDBMJABDLCNBCKOJEAHONJCCAHBLKAJCMLLGACMKOGFE&downloadImageKind=THNL_NM",
+      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2026-0400-018976&pbctCdtnNo=5920186",
+      "apslPrcRto": null,
+      "batcBidYn": "N",
+      "pvctTrgtYn": "N",
+      "alcYn": "N",
+      "pnu": "4623025022106010000",
       "grade": "C"
     },
     {
