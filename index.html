@@ -1198,7 +1198,7 @@
             <span class="data-update-time" id="updateTime"></span>
             <button class="btn-refresh" id="btnRefresh" onclick="reloadData()" disabled title="">
                 <span class="btn-spinner" id="refreshSpinner"></span>
-                <span class="btn-label" id="refreshLabel">🔃 새로고침</span>
+                <span class="btn-label" id="refreshLabel">🔃 새로<wbr>고침</span>
             </button>
         </div>
 
@@ -1666,7 +1666,7 @@
             const btn = document.getElementById('btnRefresh');
             btn.classList.remove('loading');
             btn.disabled = false;
-            document.getElementById('refreshLabel').textContent = '🔃 새로고침';
+            document.getElementById('refreshLabel').innerHTML = '🔃 새로<wbr>고침';
             document.getElementById('statusSpinner').classList.remove('active');
             document.getElementById('statusIcon').style.display = '';
         }
