@@ -1,7 +1,7 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-05-05 05:31 (KST)
+// 생성일시: 2026-05-06 05:25 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-05-05 05:31 (KST)",
+  "updatedAt": "2026-05-06 05:25 (KST)",
   "totalCount": 305,
   "items": [
     {
@@ -7296,7 +7296,7 @@ var ONBID_DATA = {
       "minBidAmt": "55.0억원",
       "apprAmtRaw": 8023425600.0,
       "minBidAmtRaw": 5500000000.0,
-      "usbdCnt": 2,
+      "usbdCnt": 3,
       "bidBgDt": "202606081000",
       "bidEdDt": "202606111700",
       "pbctNo": "5848134",
