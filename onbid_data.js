@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-05-11 05:14 (KST)
+// 생성일시: 2026-05-12 06:00 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-05-11 05:14 (KST)",
-  "totalCount": 301,
+  "updatedAt": "2026-05-12 06:00 (KST)",
+  "totalCount": 300,
   "items": [
     {
       "cltrNo": "2025-13543-001",
@@ -6946,34 +6946,6 @@ var ONBID_DATA = {
       "pvctTrgtYn": "N",
       "alcYn": "N",
       "pnu": "4824031022103670001",
-      "grade": "C"
-    },
-    {
-      "cltrNo": "2025-1200-087486",
-      "cltrNm": "경상남도 거제시 동부면 부춘리 산 71-1 외 2필지 임야",
-      "addr": "경상남도 거제시 동부면 부춘리 산 71-1 외 2필지 임야",
-      "sido": "경상남도",
-      "sigungu": "거제시",
-      "useNm": "임야",
-      "area": "296987.0",
-      "apprAmt": "11.7억원",
-      "minBidAmt": "65.0억원",
-      "apprAmtRaw": 1169292800.0,
-      "minBidAmtRaw": 6500100000.0,
-      "usbdCnt": 4,
-      "bidBgDt": "202605080000",
-      "bidEdDt": "202605082359",
-      "pbctNo": "5764864",
-      "pbctNsq": "5",
-      "prptDivNm": "기타일반재산",
-      "orgNm": "케이비부동산신탁주식회사",
-      "thumbUrl": "https://www.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=16663426&atchSn=1&hashCrpsNo=GKMEALFELOOOEADENHNPJLPPPNFJDLIJJIIBMCLIHNMLDFEHGNGEGCMNJJNLAJCD&downloadImageKind=THNL_NM",
-      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2025-1200-087486&pbctCdtnNo=5764864",
-      "apslPrcRto": null,
-      "batcBidYn": "N",
-      "pvctTrgtYn": "N",
-      "alcYn": "N",
-      "pnu": "4831032024200000000",
       "grade": "C"
     },
     {
