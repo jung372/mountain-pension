@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-05-17 05:17 (KST)
+// 생성일시: 2026-05-18 05:19 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-05-17 05:17 (KST)",
-  "totalCount": 287,
+  "updatedAt": "2026-05-18 05:19 (KST)",
+  "totalCount": 288,
   "items": [
     {
       "cltrNo": "2025-13543-001",
@@ -7814,6 +7814,34 @@ var ONBID_DATA = {
       "pvctTrgtYn": "N",
       "alcYn": "N",
       "pnu": "5011025031122540000",
+      "grade": "C"
+    },
+    {
+      "cltrNo": "2020-1200-068927",
+      "cltrNm": "제주특별자치도 서귀포시 대정읍 일과리 산1-6 ,1-12 임야",
+      "addr": "제주특별자치도 서귀포시 대정읍 일과리 산1-6 ,1-12 임야",
+      "sido": "제주특별자치도",
+      "sigungu": "서귀포시",
+      "useNm": "임야",
+      "area": "46238.0",
+      "apprAmt": "61.5억원",
+      "minBidAmt": "55.8억원",
+      "apprAmtRaw": 6151966000.0,
+      "minBidAmtRaw": 5580000000.0,
+      "usbdCnt": 22,
+      "bidBgDt": "202605181400",
+      "bidEdDt": "202605291700",
+      "pbctNo": "5990378",
+      "pbctNsq": "1",
+      "prptDivNm": "기타일반재산",
+      "orgNm": "농업협동조합자산관리회사",
+      "thumbUrl": "https://www.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=11144129&atchSn=1&hashCrpsNo=NHBEHGBEONMJOAODDKKLNOBGKHHJABHAMAMCCBCFGAFOEOMJPEBGGOCPFLEOONCC&downloadImageKind=THNL_NM",
+      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2020-1200-068927&pbctCdtnNo=5990378",
+      "apslPrcRto": null,
+      "batcBidYn": "N",
+      "pvctTrgtYn": "N",
+      "alcYn": "N",
+      "pnu": "5013025025200010006",
       "grade": "C"
     },
     {
