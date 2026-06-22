@@ -1,7 +1,7 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-06-22 05:57 (KST)
+// 생성일시: 2026-06-23 06:46 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-06-22 05:57 (KST)",
+  "updatedAt": "2026-06-23 06:46 (KST)",
   "totalCount": 354,
   "items": [
     {
@@ -6708,7 +6708,7 @@ var ONBID_DATA = {
       "minBidAmt": "11.4억원",
       "apprAmtRaw": 2937590000.0,
       "minBidAmtRaw": 1138120000.0,
-      "usbdCnt": 10,
+      "usbdCnt": 11,
       "bidBgDt": "202607201300",
       "bidEdDt": "202607201700",
       "pbctNo": "6028626",
@@ -6792,7 +6792,7 @@ var ONBID_DATA = {
       "minBidAmt": "3.9억원",
       "apprAmtRaw": 874107000.0,
       "minBidAmtRaw": 393649997.0,
-      "usbdCnt": 4,
+      "usbdCnt": 6,
       "bidBgDt": "202606191305",
       "bidEdDt": "202606191600",
       "pbctNo": "6013867",
@@ -6803,7 +6803,7 @@ var ONBID_DATA = {
       "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2026-0600-029504&pbctCdtnNo=6013867",
       "apslPrcRto": null,
       "batcBidYn": "N",
-      "pvctTrgtYn": "N",
+      "pvctTrgtYn": "Y",
       "alcYn": "N",
       "pnu": "4143010100200000000",
       "grade": "C"
@@ -8274,7 +8274,7 @@ var ONBID_DATA = {
       "area": "1107086.6",
       "apprAmt": "38.4억원",
       "minBidAmt": "19.2억원",
-      "apprAmtRaw": 3835574940.0,
+      "apprAmtRaw": 3835584940.0,
       "minBidAmtRaw": 1918000000.0,
       "usbdCnt": 8,
       "bidBgDt": "202607201000",
@@ -8556,7 +8556,7 @@ var ONBID_DATA = {
       "minBidAmt": "35.6억원",
       "apprAmtRaw": 5257596000.0,
       "minBidAmtRaw": 3556944597.0,
-      "usbdCnt": 9,
+      "usbdCnt": 10,
       "bidBgDt": "202606191100",
       "bidEdDt": "202606191400",
       "pbctNo": "5920186",
@@ -8567,7 +8567,7 @@ var ONBID_DATA = {
       "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2026-0400-018976&pbctCdtnNo=5920186",
       "apslPrcRto": null,
       "batcBidYn": "N",
-      "pvctTrgtYn": "N",
+      "pvctTrgtYn": "Y",
       "alcYn": "N",
       "pnu": "4623025022106010000",
       "grade": "C"
