@@ -5,17 +5,18 @@ onbid.go.kr 산지 공매 데이터 자동 수집 스크립트
 - 결과를 onbid_data.js 파일로 저장 (HTML에서 직접 로드 가능)
 
 [수정 이력]
+v1.6 - 차세대 API(Srvc2) 전환 및 실패 감지/재시도 강화
 v1.5 - 지분 물건 여부(quotaYn) 수집 추가
      - 주소 추출 로직 강화: onbidCltrNm 우선, 지번 없으면 ldnmAdrs 사용
      - 임야 필터: cltrUsgMclsCtgrNm = '토지' OR 물건명에 임야 포함
 """
 
 import sys
-import io
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
-import requests
 import json
 import os
 from datetime import datetime, timezone, timedelta
@@ -23,11 +24,11 @@ import time
 import pandas as pd
 import re
 
+from onbid_api import OnbidApiError, fetch_page
+
 # ─────────────────────────────────────────────
 # 1. 설정 정보
 # ─────────────────────────────────────────────
-URL = 'https://apis.data.go.kr/B010003/OnbidRlstListSrvc/getRlstCltrList'
-
 def load_env():
     """.env 파일에서 환경변수 로드 (python-dotenv 대용)"""
     env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
@@ -324,30 +325,24 @@ def fetch_region_prpt(region, prpt_cd, prpt_nm, seen_ids):
             'numOfRows'   : str(ROWS_PER_PAGE),
             'resultType'  : 'json',
             'prptDivCd'   : prpt_cd,
+            'pvctTrgtYn'  : 'N',      # 수의계약 대상 제외 (차세대 API 필수)
             'dspsMthodCd' : '0001',   # 매각
             'bidDivCd'    : '0001',   # 전자입찰 (필수 파라미터)
             'lctnSdnm'    : region,   # 지역 필터 (서버 측)
         }
         try:
-            resp = requests.get(URL, params=params, timeout=60)
-            if resp.status_code != 200:
-                log(f"    [HTTP오류] {resp.status_code}")
+            context = f'{region}/{prpt_nm} p{page}'
+            body = fetch_page(params, context, log)
+            if body is None:
                 break
-
-            data = resp.json()
-            header = data.get('header', data.get('result', {}))
-            rc = header.get('resultCode', '')
-
-            if rc == '03':   # NODATA
-                break
-            if rc not in ('00', '0', '200'):
-                log(f"    [API오류] {rc}: {header.get('resultMsg','')}")
-                return None
-
-            body = data.get('body', {})
             total_cnt = int(body.get('totalCount', 0))
             items_node = body.get('items', {})
-            raw = items_node.get('item', []) if isinstance(items_node, dict) else []
+            if isinstance(items_node, dict):
+                raw = items_node.get('item', [])
+            elif isinstance(items_node, list):
+                raw = items_node
+            else:
+                raw = []
             if isinstance(raw, dict):
                 raw = [raw]
 
@@ -370,11 +365,8 @@ def fetch_region_prpt(region, prpt_cd, prpt_nm, seen_ids):
             page += 1
             time.sleep(0.3)   # API 호출 간격
 
-        except requests.exceptions.Timeout:
-            log(f"    [타임아웃] {region}/{prpt_nm} p{page}")
-            return None
-        except Exception as e:
-            log(f"    [오류] {e}")
+        except (OnbidApiError, ValueError, TypeError) as e:
+            log(f"    [수집오류] {e}")
             return None
 
     return results
@@ -385,7 +377,6 @@ def fetch_region_prpt(region, prpt_cd, prpt_nm, seen_ids):
 def fetch_all():
     all_items = []
     seen_ids  = set()
-    has_error = False
 
     for prpt_cd, prpt_nm in PRPT_CODES:
         log(f"[{prpt_nm}] 지역별 수집 시작 ({len(REGIONS)}개 지역)")
@@ -393,17 +384,15 @@ def fetch_all():
             before = len(all_items)
             items = fetch_region_prpt(region, prpt_cd, prpt_nm, seen_ids)
             if items is None:
-                has_error = True
-                continue
+                raise OnbidApiError(
+                    f"{region}/{prpt_nm} 수집 실패로 전체 작업을 중단합니다."
+                )
             all_items.extend(items)
             added = len(all_items) - before
             if added > 0:
                 log(f"  {region}: +{added}건 (누계 {len(all_items)}건)")
             time.sleep(0.2)
 
-    # 일부 지역에서 오류가 발생하더라도 수집된 데이터가 있다면 반환 (부분 성공 허용)
-    if has_error:
-        log("! 주의: 일부 지역 또는 재산유형 수집 중 오류(타임아웃 등)가 발생했습니다. 수집된 범위까지만 저장합니다.")
     return all_items
 
 # ─────────────────────────────────────────────
@@ -431,11 +420,19 @@ def save_as_js(items):
 # ─────────────────────────────────────────────
 # 10. 실행
 # ─────────────────────────────────────────────
-if __name__ == '__main__':
+def main():
     log("=" * 55)
     log("산지 공매 데이터 수집 시작 (v1.5 — 전 지역/전 페이지)")
     t0 = time.time()
-    items = fetch_all()
+    if not AUTH_KEY:
+        log("[실패] ONBID_AUTH_KEY 환경변수가 설정되지 않았습니다.")
+        return 1
+
+    try:
+        items = fetch_all()
+    except OnbidApiError as exc:
+        log(f"[실패] {exc}")
+        return 1
     elapsed = time.time() - t0
     
     if items:
@@ -457,7 +454,13 @@ if __name__ == '__main__':
         save_as_js(items)
         log(f"최종 결과: 유찰 2회 이상 임야 {len(items)}건 저장 ({elapsed:.0f}초)")
     else:
-        log("수집된 데이터가 없거나 수집 중 오류가 발생했습니다.")
+        log("[실패] 전국 수집 결과가 0건이므로 기존 데이터를 유지합니다.")
+        return 1
         
     log("수집 완료")
     log("=" * 55)
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

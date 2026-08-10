@@ -1,20 +1,24 @@
 """
 산지연금 데이터 수집기 (GitHub Actions용)
 - onbid.go.kr API에서 임야 공매 데이터 수집
-- data/YYYY-MM-DD.json 으로 저장 후 GitHub Push
+- data/YYYY-MM-DD.json 및 onbid_data.js로 저장 후 GitHub Push
 """
 
-import sys, io, os, re, json, time, requests
+import sys, os, re, json, time
 import pandas as pd
 from datetime import datetime, timezone, timedelta
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+from onbid_api import OnbidApiError, fetch_page
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 KST = timezone(timedelta(hours=9))
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR   = os.path.join(SCRIPT_DIR, 'data')
-URL        = 'https://apis.data.go.kr/B010003/OnbidRlstListSrvc/getRlstCltrList'
+OUTPUT_FILE = os.path.join(SCRIPT_DIR, 'onbid_data.js')
 
 AUTH_KEY = os.environ.get('ONBID_AUTH_KEY', '')
 
@@ -250,10 +254,14 @@ def clean_item(item):
         'pbctNsq'     : item.get('pbctNsq', ''),
         'prptDivNm'   : item.get('prptDivNm', ''),
         'orgNm'       : item.get('exctOrgNm', ''),
+        'thumbUrl'    : item.get('thnlImgUrlAdr', ''),
         'onbidUrl'    : (
             f"https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do"
             f"?cltrMngNo={cltr_no}&pbctCdtnNo={pbct_no}"
         ),
+        'apslPrcRto'  : item.get('apslPrcCtrsLowstBidRto'),
+        'batcBidYn'   : item.get('batcBidYn', 'N'),
+        'pvctTrgtYn'  : item.get('pvctTrgtYn', 'N'),
         'alcYn'       : 'Y' if item.get('alcYn') == 'Y' or '지분' in item.get('onbidCltrNm', '') else 'N',
         'grade'       : 'C',  # 이후 PNU 매칭으로 업데이트
         'pnu'         : '',
@@ -271,28 +279,24 @@ def fetch_region_prpt(region, prpt_cd, prpt_nm, seen_ids):
             'numOfRows'  : str(ROWS_PER_PAGE),
             'resultType' : 'json',
             'prptDivCd'  : prpt_cd,
+            'pvctTrgtYn' : 'N',
             'dspsMthodCd': '0001',
             'bidDivCd'   : '0001',
             'lctnSdnm'   : region,
         }
         try:
-            resp = requests.get(URL, params=params, timeout=60)
-            if resp.status_code != 200:
-                log(f'  [HTTP오류] {resp.status_code}')
+            context = f'{region}/{prpt_nm} p{page}'
+            body = fetch_page(params, context, log)
+            if body is None:
                 break
-            data   = resp.json()
-            header = data.get('header', data.get('result', {}))
-            rc     = header.get('resultCode', '')
-            if rc == '03':
-                break
-            if rc not in ('00', '0', '200'):
-                log(f'  [API오류] {rc}: {header.get("resultMsg","")}')
-                return None
-
-            body       = data.get('body', {})
             total_cnt  = int(body.get('totalCount', 0))
             items_node = body.get('items', {})
-            raw        = items_node.get('item', []) if isinstance(items_node, dict) else []
+            if isinstance(items_node, dict):
+                raw = items_node.get('item', [])
+            elif isinstance(items_node, list):
+                raw = items_node
+            else:
+                raw = []
             if isinstance(raw, dict):
                 raw = [raw]
 
@@ -312,11 +316,8 @@ def fetch_region_prpt(region, prpt_cd, prpt_nm, seen_ids):
                 break
             page += 1
             time.sleep(0.3)
-        except requests.exceptions.Timeout:
-            log(f'  [타임아웃] {region}/{prpt_nm} p{page}')
-            return None
-        except Exception as e:
-            log(f'  [오류] {e}')
+        except (OnbidApiError, ValueError, TypeError) as e:
+            log(f'  [수집오류] {e}')
             return None
     return results
 
@@ -325,21 +326,19 @@ def fetch_region_prpt(region, prpt_cd, prpt_nm, seen_ids):
 def fetch_all():
     all_items = []
     seen_ids  = set()
-    has_error = False
     for prpt_cd, prpt_nm in PRPT_CODES:
         log(f'[{prpt_nm}] 수집 시작')
         for region in REGIONS:
             before = len(all_items)
             items  = fetch_region_prpt(region, prpt_cd, prpt_nm, seen_ids)
             if items is None:
-                has_error = True
-                continue
+                raise OnbidApiError(
+                    f'{region}/{prpt_nm} 수집 실패로 전체 작업을 중단합니다.'
+                )
             all_items.extend(items)
             if len(all_items) > before:
                 log(f'  {region}: +{len(all_items)-before}건 (누계 {len(all_items)}건)')
             time.sleep(0.2)
-    if has_error:
-        log('! 일부 지역 오류 발생 — 수집된 범위까지 저장')
     return all_items
 
 
@@ -359,13 +358,41 @@ def save_json(items, date_str):
     return path
 
 
+def save_js(items):
+    now_str = datetime.now(KST).strftime('%Y-%m-%d %H:%M (KST)')
+    payload = {
+        'updatedAt' : now_str,
+        'totalCount': len(items),
+        'items'     : items,
+    }
+    content = (
+        "// 자동 생성 파일 - 직접 수정하지 마세요.\n"
+        f"// 생성일시: {now_str}\n"
+        "var ONBID_DATA = "
+        + json.dumps(payload, ensure_ascii=False, indent=2)
+        + ";\n"
+    )
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+        f.write(content)
+    log(f'[완료] 저장: {OUTPUT_FILE} ({len(items)}건)')
+    return OUTPUT_FILE
+
+
 # ── 실행 ──────────────────────────────────────────────────────────────────────
-if __name__ == '__main__':
+def main():
     log('=' * 55)
     log('산지연금 데이터 수집 시작')
     t0       = time.time()
     today_str = datetime.now(KST).strftime('%Y-%m-%d')
-    items    = fetch_all()
+    if not AUTH_KEY:
+        log('[실패] ONBID_AUTH_KEY 환경변수가 설정되지 않았습니다.')
+        return 1
+
+    try:
+        items = fetch_all()
+    except OnbidApiError as exc:
+        log(f'[실패] {exc}')
+        return 1
 
     if items:
         pnu_lookup = load_pnu_lookup()
@@ -377,7 +404,14 @@ if __name__ == '__main__':
                 item['pnu']   = pnu
                 item['grade'] = grade_lookup.get(pnu, 'C')
         save_json(items, today_str)
+        save_js(items)
         log(f'최종: {len(items)}건 저장 ({time.time()-t0:.0f}초)')
     else:
-        log('수집 데이터 없음')
+        log('[실패] 전국 수집 결과가 0건이므로 기존 데이터를 유지합니다.')
+        return 1
     log('=' * 55)
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

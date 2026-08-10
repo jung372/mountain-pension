@@ -1,15 +1,18 @@
 name: Update Onbid Data
 on:
-  schedule:
-    - cron: '0 19 * * *' # 매일 한국시간 오전 4시 실행 (UTC 19:00 = KST 04:00)
-  workflow_dispatch: # 수동 실행 버튼 추가
+  workflow_dispatch: # 웹사이트 새로고침 버튼 및 Actions 화면의 수동 실행
 
 permissions:
   contents: write  # 저장소에 push 권한 부여
 
+concurrency:
+  group: onbid-data-update
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,20 +20,25 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
+          cache: 'pip'
       - name: Install dependencies
-        run: pip install requests pandas openpyxl
+        run: pip install -r requirements.txt
       - name: Run update script
         env:
           ONBID_AUTH_KEY: ${{ secrets.ONBID_AUTH_KEY }}
-        run: python fetch_onbid.py
+        run: python collector.py
       - name: Commit and Push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "action@github.com"
-          git add onbid_data.js
-          git commit -m "Auto-update onbid data" || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ onbid_data.js
+          if git diff --cached --quiet; then
+            echo "변경된 데이터가 없습니다."
+            exit 0
+          fi
+          git commit -m "chore: 수동 데이터 갱신 $(date +'%Y-%m-%d') [skip ci]"
           git pull --rebase origin main
           git push
