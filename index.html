@@ -1354,14 +1354,15 @@
             </div>
             <p style="font-size:13px; color:#555; line-height:1.7; margin-bottom:16px;">
                 데이터를 갱신하려면 <strong>GitHub Personal Access Token (PAT)</strong>이 필요합니다.<br>
-                PAT는 이 브라우저에만 저장되며 외부로 전송되지 않습니다.
+                PAT는 이 브라우저에 저장되며, 워크플로 실행을 위해 GitHub API로만 전송됩니다.
             </p>
             <div style="background:#f0f8f4; border:1px solid #b5ddc4; border-radius:6px; padding:12px 14px; font-size:12px; color:#2d5a3d; line-height:1.8; margin-bottom:16px;">
                 <strong>📌 PAT 발급 방법</strong><br>
-                1. <a href="https://github.com/settings/tokens" target="_blank" style="color:#1a5c2e;">github.com/settings/tokens</a> 접속<br>
-                2. <strong>Generate new token (classic)</strong> 클릭<br>
-                3. <strong>workflow</strong> 권한 체크 후 생성<br>
-                4. 생성된 토큰을 아래에 붙여넣기
+                1. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:#1a5c2e;">Fine-grained token 만들기</a><br>
+                2. Resource owner: <strong>jung372</strong>, Repository: <strong>mountain-pension</strong><br>
+                3. Repository permissions에서 <strong>Actions: Read and write</strong> 선택<br>
+                4. 생성된 토큰을 아래에 붙여넣기<br>
+                <span style="color:#68766d;">※ Classic token을 사용할 경우 <strong>repo</strong> 권한이 필요합니다.</span>
             </div>
             <input type="password" id="patInput"
                 placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
@@ -1591,6 +1592,17 @@
                 } else if (resp.status === 401) {
                     clearPAT();
                     alert('GitHub 인증 실패\n\nPAT(Personal Access Token)이 만료되었거나 잘못되었습니다.\n다시 입력해 주세요.');
+                    resetRefreshBtn();
+                    openPATModal();
+                } else if (resp.status === 403) {
+                    clearPAT();
+                    alert(
+                        'GitHub 권한 부족 (HTTP 403)\n\n' +
+                        'Fine-grained PAT: jung372/mountain-pension 저장소를 선택하고 ' +
+                        'Actions 권한을 Read and write로 설정해 주세요.\n\n' +
+                        'Classic PAT: repo 권한이 필요합니다.\n\n' +
+                        '저장된 기존 토큰을 삭제했습니다. 새 토큰을 입력해 주세요.'
+                    );
                     resetRefreshBtn();
                     openPATModal();
                 } else {
