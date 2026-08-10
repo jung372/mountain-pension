@@ -1566,7 +1566,7 @@
             document.getElementById('statusIcon').style.display = 'none';
             document.getElementById('statusSpinner').classList.add('active');
             document.getElementById('statusText').innerHTML =
-                '<span style="color:#2d6a42;">GitHub Actions에서 온비드 데이터를 수집하는 중입니다... (약 2~5분 소요)</span>';
+                '<span style="color:#2d6a42;">GitHub Actions에서 온비드 데이터를 수집하는 중입니다... (보통 수 분, 연결 지연 시 최대 30분)</span>';
 
             try {
                 const resp = await fetch(
@@ -1586,7 +1586,7 @@
                 if (resp.status === 204) {
                     // 성공 → 워크플로우 완료 대기 후 페이지 갱신
                     document.getElementById('statusText').innerHTML =
-                        '⏳ <strong>워크플로우가 시작되었습니다!</strong> 데이터 수집 완료 후 자동으로 페이지가 새로고침됩니다. (약 2~5분)';
+                        '⏳ <strong>워크플로우가 시작되었습니다!</strong> 데이터 수집 완료 후 자동으로 페이지가 새로고침됩니다. (보통 수 분, 연결 지연 시 최대 30분)';
                     label.textContent = '⏳ 수집 중...';
                     pollWorkflowCompletion(pat);
                 } else if (resp.status === 401) {
@@ -1617,8 +1617,8 @@
         }
 
         async function pollWorkflowCompletion(pat) {
-            // 최대 10분간 15초 간격으로 폴링
-            const maxAttempts = 40;
+            // 워크플로 자체 제한(30분)에 맞춰 15초 간격으로 완료 여부 확인
+            const maxAttempts = 120;
             let attempts = 0;
             // 워크플로우가 API에 등록될 시간 확보 (10초 대기)
             await new Promise(r => setTimeout(r, 10000));
