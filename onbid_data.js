@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-10-17 06:57 (KST)
+// 생성일시: 2026-10-18 06:16 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-10-17 06:57 (KST)",
-  "totalCount": 414,
+  "updatedAt": "2026-10-18 06:16 (KST)",
+  "totalCount": 415,
   "items": [
     {
       "cltrNo": "2026-00999-006",
@@ -11661,6 +11661,35 @@ var ONBID_DATA = {
       "alcYn": "Y",
       "grade": "C",
       "pnu": "4721010500109200000"
+    },
+    {
+      "cltrNo": "2026-0900-047809",
+      "cltrNm": "충청북도 괴산군 청천면 후영리 산 33-1 임야",
+      "addr": "충청북도 괴산군 청천면 후영리 산 33-1 임야",
+      "sido": "충청북도",
+      "sigungu": "괴산군",
+      "useNm": "임야",
+      "area": "3086.0",
+      "apprAmt": "80.6억원",
+      "minBidAmt": "55.0억원",
+      "apprAmtRaw": 8058458000.0,
+      "minBidAmtRaw": 5500000000.0,
+      "usbdCnt": 2,
+      "bidBgDt": "202612141000",
+      "bidEdDt": "202612171700",
+      "status": "공고중",
+      "pbctNo": "6191256",
+      "pbctNsq": "5",
+      "prptDivNm": "기타일반재산",
+      "orgNm": "",
+      "thumbUrl": "https://www.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=17084458&atchSn=3&hashCrpsNo=BDHFNGMGIHOOPCBCCOLLNFDIMIDLCNJBHNOHGHGPFAPOPJHGOJOJBAHLHCGGBFAE&downloadImageKind=THNL_NM",
+      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2026-0900-047809&pbctCdtnNo=6191256",
+      "apslPrcRto": null,
+      "batcBidYn": "Y",
+      "pvctTrgtYn": "N",
+      "alcYn": "Y",
+      "grade": "C",
+      "pnu": "4376036046200000000"
     },
     {
       "cltrNo": "2026-0100-098431",
