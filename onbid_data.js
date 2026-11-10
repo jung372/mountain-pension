@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-11-10 10:54 (KST)
+// 생성일시: 2026-11-11 08:57 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-11-10 10:54 (KST)",
-  "totalCount": 363,
+  "updatedAt": "2026-11-11 08:57 (KST)",
+  "totalCount": 364,
   "items": [
     {
       "cltrNo": "2026-00999-006",
@@ -10501,6 +10501,35 @@ var ONBID_DATA = {
       "alcYn": "Y",
       "grade": "C",
       "pnu": "5013031027124890007"
+    },
+    {
+      "cltrNo": "2020-1200-068927",
+      "cltrNm": "제주특별자치도 서귀포시 대정읍 일과리 산1-6 ,1-12 임야",
+      "addr": "제주특별자치도 서귀포시 대정읍 일과리 산1-6 ,1-12 임야",
+      "sido": "제주특별자치도",
+      "sigungu": "서귀포시",
+      "useNm": "임야",
+      "area": "46238.0",
+      "apprAmt": "61.5억원",
+      "minBidAmt": "55.8억원",
+      "apprAmtRaw": 6151966000.0,
+      "minBidAmtRaw": 5580000000.0,
+      "usbdCnt": 24,
+      "bidBgDt": "202611101400",
+      "bidEdDt": "202611241700",
+      "status": "입찰중",
+      "pbctNo": "6273686",
+      "pbctNsq": "1",
+      "prptDivNm": "기타일반재산",
+      "orgNm": "",
+      "thumbUrl": "https://www.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=11144129&atchSn=1&hashCrpsNo=NHBEHGBEONMJOAODDKKLNOBGKHHJABHAMAMCCBCFGAFOEOMJPEBGGOCPFLEOONCC&downloadImageKind=THNL_NM",
+      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2020-1200-068927&pbctCdtnNo=6273686",
+      "apslPrcRto": null,
+      "batcBidYn": "N",
+      "pvctTrgtYn": "N",
+      "alcYn": "N",
+      "grade": "C",
+      "pnu": "5013025025200010006"
     },
     {
       "cltrNo": "2026-1000-056866",
