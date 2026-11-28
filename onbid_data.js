@@ -1,8 +1,8 @@
 // 자동 생성 파일 - 직접 수정하지 마세요.
-// 생성일시: 2026-11-27 11:05 (KST)
+// 생성일시: 2026-11-28 10:48 (KST)
 var ONBID_DATA = {
-  "updatedAt": "2026-11-27 11:05 (KST)",
-  "totalCount": 291,
+  "updatedAt": "2026-11-28 10:48 (KST)",
+  "totalCount": 290,
   "items": [
     {
       "cltrNo": "2026-00999-006",
@@ -7327,7 +7327,7 @@ var ONBID_DATA = {
       "usbdCnt": 5,
       "bidBgDt": "202611170900",
       "bidEdDt": "202611271600",
-      "status": "입찰중",
+      "status": "종료",
       "pbctNo": "6268232",
       "pbctNsq": "1",
       "prptDivNm": "기타일반재산",
@@ -8165,7 +8165,7 @@ var ONBID_DATA = {
       "minBidAmt": "55.0억원",
       "apprAmtRaw": 8058458000.0,
       "minBidAmtRaw": 5500000000.0,
-      "usbdCnt": 3,
+      "usbdCnt": 4,
       "bidBgDt": "202612141000",
       "bidEdDt": "202612171700",
       "status": "공고중",
@@ -8226,7 +8226,7 @@ var ONBID_DATA = {
       "usbdCnt": 5,
       "bidBgDt": "202610261000",
       "bidEdDt": "202611271700",
-      "status": "입찰중",
+      "status": "종료",
       "pbctNo": "6091839",
       "pbctNsq": "6",
       "prptDivNm": "기타일반재산",
@@ -8255,7 +8255,7 @@ var ONBID_DATA = {
       "usbdCnt": 5,
       "bidBgDt": "202610261000",
       "bidEdDt": "202611271700",
-      "status": "입찰중",
+      "status": "종료",
       "pbctNo": "6091803",
       "pbctNsq": "6",
       "prptDivNm": "기타일반재산",
@@ -8413,35 +8413,6 @@ var ONBID_DATA = {
       "alcYn": "Y",
       "grade": "C",
       "pnu": "5013031027124890007"
-    },
-    {
-      "cltrNo": "2026-0600-034785",
-      "cltrNm": "제주시 조천읍 와산리 1398-1 임야 및 1398-5 도로 지분",
-      "addr": "제주시 조천읍 와산리 1398-1 임야 및 1398-5 도로 지분",
-      "sido": "제주특별자치도",
-      "sigungu": "제주시",
-      "useNm": "임야",
-      "area": "416.0",
-      "apprAmt": "1.2억원",
-      "minBidAmt": "8,541만원",
-      "apprAmtRaw": 115866000.0,
-      "minBidAmtRaw": 85410000.0,
-      "usbdCnt": 11,
-      "bidBgDt": "202611261600",
-      "bidEdDt": "202611261700",
-      "status": "종료",
-      "pbctNo": "6278830",
-      "pbctNsq": "6",
-      "prptDivNm": "기타일반재산",
-      "orgNm": "",
-      "thumbUrl": "https://www.onbid.co.kr/op/cm/syc/filemng/filemngprcs/FileMngPrcsController/dnldFile.do?atchFileLstNo=17037007&atchSn=1&hashCrpsNo=KKNPLMIIIOOEGFGBBBFLMICHEFINCOANODOMKACCEAKFBCCCMAAPNEIMOBIFGPMO&downloadImageKind=THNL_NM",
-      "onbidUrl": "https://www.onbid.co.kr/op/pblc/cltrInfo/opMnrCltrDtlsForm.do?cltrMngNo=2026-0600-034785&pbctCdtnNo=6278830",
-      "apslPrcRto": null,
-      "batcBidYn": "N",
-      "pvctTrgtYn": "N",
-      "alcYn": "Y",
-      "grade": "C",
-      "pnu": ""
     }
   ]
 };
